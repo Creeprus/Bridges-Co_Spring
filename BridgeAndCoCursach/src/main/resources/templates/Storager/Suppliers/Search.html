@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bridges</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src='<c:url value="/resources/js/jquery-1.9.1.js" />'></script>
+  <script type="text/javascript" src='<c:url value="/resources/js/bootstrap.js" />'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.min.js"></script>
+  <script>
+    $(function() {
+
+      $("#checkDataAdd").validate({
+        rules: {
+          suppliername: {
+            required: true,
+            minlength: 2,
+            maxLength:100
+          },
+
+          Country:{
+            required:true,
+            minlength: 2,
+            maxLength:100
+          },
+
+          action: "required"
+        },
+        messages: {
+          suppliername: {
+            required: "Поле не должно быть пустым",
+            minlength: "Минимум 10 символов",
+            maxLength: "Максимум 100 символов"
+          },
+          Country: {
+            required: "Поле не должно быть пустым",
+            minlength: "Минимум 10 символов",
+            maxLength: "Максимум 100 символов"
+          },
+
+          action: "Please provide some data"
+        }
+      });
+
+    });
+    $(function() {
+
+      $("#checkDataEdit").validate({
+        rules: {
+          suppliername: {
+            required: true,
+            minlength: 2,
+            maxLength:100
+          },
+
+          Country:{
+            required:true,
+            minlength: 2,
+            maxLength:100
+          },
+
+          action: "required"
+        },
+        messages: {
+          suppliername: {
+            required: "Поле не должно быть пустым",
+            minlength: "Минимум 10 символов",
+            maxLength: "Максимум 100 символов"
+          },
+          Country: {
+            required: "Поле не должно быть пустым",
+            minlength: "Минимум 10 символов",
+            maxLength: "Максимум 100 символов"
+          },
+
+          action: "Please provide some data"
+        }
+      });
+
+    });
+  </script>
+
+</head>
+
+<body style="background: linear-gradient(to right, #ee7724, #c0fa0d, #bedd36, #b44593)">
+
+
+<div th:insert="Header/header :: headerStorager"></div>
+<div class="col card-body justify-content-center align-items-center text-center">
+  <a  class="btn btn-success "   data-toggle="modal" data-target="#searchsupplier" >Поиск</a>
+  <a  class="btn btn-success "   data-toggle="modal" data-target="#addsupplier" >Добавить поставщика</a>
+  <a  class="btn btn-success "  href="/Supplier/SortAsc" >Сортировка товаров по возрастанию</a>
+  <a  class="btn btn-success "  href="/Supplier/SortDesc" >Сортировка товаров по убыванию</a>
+  <a  class="btn btn-success "  href="/Storager/Index/"  >Обратно</a></div>
+<div class="modal" id="addsupplier">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Добавление поставщика</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+
+        <form method="post" th:action="'/Storager/Suppliers/Add/'" id="checkDataAdd">
+
+          <input th:field="*{supplier.suppliername}"  id="suppliername" type="text" placeholder="Поставщик" name="suppliername" ><br>
+
+          <input th:field="*{supplier.Country}" id="Country" type="text"  placeholder="Страна" name="Country"><br>
+
+
+          <br>
+          <button type="submit" class="btn btn-danger"  >Добавить поставщика</button>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<div class="modal" id="searchsupplier">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Поиск Поставщика</h4>
+
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+
+        <form method="get" th:action="'/Storager/Suppliers/Search'" >
+          <input type="text" name="search_name" placeholder="Поиск"><br>
+
+          <button type="submit" class="btn btn-danger"  >Найти поставщика</button>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="card-body text-center card shadow-2-strong justify-content-center align-items-center">
+  <div class=" " >
+    <div class=" text-center" >
+      <div class="row justify-content-md-center">
+        <div class="col">
+          Поставщик
+        </div>
+        <div class="col">
+          Страна
+        </div>
+
+        <div class="col ">
+
+        </div>
+        <div class="col ">
+
+        </div>
+      </div>
+    </div>
+    <div class=" text-center " th:each="el: ${suppliers}">
+
+      <div class="row justify-content-md-center" >
+        <div class="col">
+          <p th:text="${el.suppliername}"> </p>
+        </div>
+        <div class="col">
+          <p th:text="${el.Country}"> </p>
+        </div>
+
+        <div class="col ">
+          <a  class="btn btn-success"   data-toggle="modal" th:data-target="${'#editsupplier'+el.id}" >Изменить поставщика</a>
+        </div>
+        <div class="col ">
+          <a  class="btn btn-danger"   data-toggle="modal" th:data-target="${'#deletesupplier'+el.id}" >Удалить</a>
+        </div>
+      </div>
+
+      <div class="modal" th:id="${'editsupplier'+el.id}">
+
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Изменение товара</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+
+              <form method="post" th:action="'/Storager/Suppliers/Edit/'+${el.id}" id="checkDataEdit">
+                <h5 class="">
+                  Поставщик
+                </h5>
+                <input type="text" id="suppliername" th:value="${el.suppliername}" name="suppliername"> </input>
+                <h5 class="">
+                  Страна
+                </h5>
+                <input type="text" id="Country" th:value="${el.Country}" name="Country"> </input>
+
+                <br>
+                <button type="submit" class="btn btn-danger"  >Изменить поставщика</button>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="modal" th:id="${'deletesupplier'+el.id}">
+
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Вы действительно хотите удалить поставщика?</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+
+
+              <h5 class="">
+                Поставщик
+              </h5>
+              <p type="text"  th:text="${el.suppliername}" > </p>
+              <h5 class="">
+                Страна
+              </h5>
+              <p type="text"  th:text="${el.Country}" > </p>
+
+              <br>
+              <a th:href="'/Storager/Suppliers/Delete/' +${el.id}" class="btn btn-danger">Удалить</a>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bridges&CO</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='<c:url value="/resources/js/jquery-1.9.1.js" />'></script>
+    <script type="text/javascript" src='<c:url value="/resources/js/bootstrap.js" />'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.min.js"></script>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
+
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
+
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
+
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+    <script>
+
+        function doMath(id) {
+            var numOne = document.getElementById('cost'+id).value;
+            var numTwo = document.getElementById('amount'+id).value;
+            var theProduct=parseFloat(theProduct);
+
+             theProduct = parseFloat(numOne) * parseFloat(numTwo);
+            theProduct =  theProduct.toPrecision(4);
+            console.log(numOne); console.log(numTwo);
+            console.log(theProduct);
+            document.getElementById('total'+id).innerText=theProduct.toString();
+
+
+        }
+        function Differ(id) {
+
+            var numOne = document.getElementById('storageamount'+id).value;
+            var numTwo = document.getElementById('amount'+id).value;
+            const button = document.querySelector('#ordership'+id);
+            if(numTwo>numOne)
+            {
+                console.log("Нельзя");
+               alert("На складе нету столько товара")
+                button.disabled =true;
+            }
+            else
+            {
+                if(numTwo>=0) {
+                    doMath(id);
+                }
+                button.disabled =false;
+            }
+        }
+
+        $(function() {
+
+            $("#checkDataAdd").validate({
+                rules: {
+                    adress: {
+                        required: true,
+                        minlength: 10,
+                        maxLength:200
+                    },
+
+                    action: "required"
+                },
+                messages: {
+                    adress: {
+                        required: "Поле не должно быть пустым",
+                        minlength: "Минимум 10 символов",
+                        maxLength: "Максимум 200 символов"
+                    },
+
+                    action: "Please provide some data"
+                }
+            });
+        });
+    </script>
+</head>
+<body style="background: linear-gradient(to right, #ee7724, #c0fa0d, #bedd36, #b44593)">
+<div th:insert="Header/header :: headerClient"></div>
+<div class="row mb-5 text-center" >
+
+    <div class="col-5 themed-grid-col card shadow-3-strong container" th:each="el: ${storage}">
+
+        <div class="form-control">
+            <h3>Название товара:</h3>
+
+        </div>
+        <p th:text="${el.shipments.shipmentname}"> </p>
+        <div class="form-control">
+            <h3>Стоимость:</h3>
+
+        </div>
+        <p th:text="${el.shipments.Cost}"> </p>
+        <div class="row mb-3 justify-content-md-center row-cols-1">
+        <div class="col-md-auto">
+
+            <a  class="btn btn-info"   data-toggle="modal" th:data-target="${'#detailshipment'+el.id}" >Просмотреть информацию о товаре</a>
+            <div class="modal" th:id="${'detailshipment'+el.id}">
+
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Информация о товаре</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body">
+
+
+                            <h5 class="">
+                                Наименование товара
+                            </h5>
+                            <p th:text="${el.shipments.shipmentname}"> </p>
+                            <h5 class="">
+                                Стоимость
+                            </h5>
+                            <p th:text="${el.shipments.Cost}"> </p>
+                            <h5 class="">
+                                Срок годности (до)
+                            </h5>
+                            <p th:text="${el.shipments.expirationdate}"> </p>
+                            <h5 class="">
+                                Количество товара
+                            </h5>
+                            <p th:text="${el.amount}"> </p>
+                            <h5 class="">
+                                Поставщик
+                            </h5>
+                            <p th:text="${el.supplies.supplier.suppliername}"> </p>
+                            <br>
+                            <h5 class="">
+                                Страна поставщика
+                            </h5>
+                            <p th:text="${el.supplies.supplier.Country}"> </p>
+                            <br>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-auto">
+
+            <a  class="btn btn-success"   data-toggle="modal" th:data-target="${'#ordershipment'+el.id}" >Заказать товар</a>
+        </div>
+        </div>
+        <div class="modal" th:id="${'ordershipment'+el.id}">
+
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Вы уверены что хотите заказать следующий товар?</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        <form method="post" th:action="'/Client/Order/Add'" id="checkDataAdd" >
+                            <h5 class="">
+                                Наименование товара
+                            </h5>
+                            <p th:text="${el.shipments.shipmentname}"> </p>
+                            <h5 class="">
+                                Стоимость
+                            </h5>
+                            <p th:text="${el.shipments.Cost}"  > </p>
+                            <h5 class="">
+                                На адресс:
+                            </h5>
+
+                            <input  th:field="${pathing.adress}" id="adress" type="text" placeholder="Ваш адресс" name="adress" required><br>
+                            <h5 class="">
+                                В количестве:
+                            </h5>
+
+                            <input type="hidden"  th:value="${el.shipments.Cost}" name="curretcost" th:id="cost+${el.id}">
+                            <input type="hidden"  th:value="${el.id}" name="currentid">
+                            <input type="hidden" th:id="storageamount+${el.id}" th:value="${el.amount}" name="">
+                            <input onchange="Differ(currentid.value)" th:field="${orderShipment.amount}" class="pass-quantity" th:id="amount+${el.id}" min="1" oninput="this.value = Math.abs(this.value)" type="number" placeholder="Количество товара" name="amount" ><br>
+
+                            <br>
+                            <h5 class="">
+                              Общая сумма
+                            </h5>
+                            <br>
+                            <p  th:id="total+${el.id}" th:field="${orderShipment.summary}" ></p>
+                            <br>
+                            <button type="submit"  class="btn btn-danger" th:id="ordership+${el.id}" >Заказать товар</button>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+</body>
+</html>

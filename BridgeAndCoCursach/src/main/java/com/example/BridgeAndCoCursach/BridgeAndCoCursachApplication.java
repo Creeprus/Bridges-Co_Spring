@@ -1,0 +1,13 @@
+package com.example.BridgeAndCoCursach;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class BridgeAndCoCursachApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(BridgeAndCoCursachApplication.class, args);
+	}
+
+}

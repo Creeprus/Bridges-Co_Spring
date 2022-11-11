@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bridges</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src='<c:url value="/resources/js/jquery-1.9.1.js" />'></script>
+    <script type="text/javascript" src='<c:url value="/resources/js/bootstrap.js" />'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.min.js"></script>
+    <script>
+        $(function() {
+
+            $("#checkDataAdd").validate({
+                rules: {
+                    shipmentname: {
+                        required: true,
+                        minlength: 10,
+                        maxLength:150
+                    },
+                    Cost:{
+                        required:true,
+                        min:0.01
+                    },
+                    expirationdate:
+                        {
+
+
+                        },
+                    amount:
+                        {
+                            required:true,
+                            min:1
+                        },
+                    action: "required"
+                },
+                messages: {
+                    shipmentname: {
+                        required: "Поле не должно быть пустым",
+                        minlength: "Минимум 10 символов",
+                        maxLength: "Максимум 150 символов"
+                    },
+                    Cost: {
+                        required: "Поле не должно быть пустым",
+                        min: "Цена не может быть меньше 0.00",
+            },
+                    expirationdate: {
+
+                    },
+                    amount: {
+                        required: "Поле не должно быть пустым",
+                        min: "Цена не может быть меньше 0.00",
+                    },
+                    action: "Please provide some data"
+                }
+            });
+        });
+    </script>
+</head>
+
+<body style="background: linear-gradient(to right, #ee7724, #c0fa0d, #bedd36, #b44593)">
+
+
+<div th:insert="Header/header :: headerSupplier"></div>
+<div class="col card-body justify-content-center align-items-center text-center">   <a  class="btn btn-success "   data-toggle="modal" data-target="#addshipment" >Добавить товар</a>
+    <a  class="btn btn-success "   data-toggle="modal" data-target="#searchshipment" >Поиск</a>
+<!--    <a  class="btn btn-success "  href="/Supplier/SortAsc" >Сортировка товаров по возрастанию</a>-->
+<!--    <a  class="btn btn-success "  href="/Supplier/SortDesc" >Сортировка товаров по убыванию</a>-->
+    <a  class="btn btn-success "  href="/Supplier/Index/"  >Обратно</a></div>
+
+<div class="modal" id="searchshipment">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Добавление товара</h4>
+
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+
+                <form method="get" th:action="'/Supplier/Search'" >
+                  <input type="text" name="search_name" placeholder="Поиск"><br>
+
+                    <button type="submit" class="btn btn-danger"  >Найти товар</button>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div class="modal" id="addshipment">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Добавление товара</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+
+                <form method="post" th:action="'/Supplier/Add/'" id="checkDataAdd">
+
+                    <input th:field="*{shipment.shipmentname}"  id="shipmentname" type="text" placeholder="Наименование товара" name="shipmentname" ><br>
+
+                    <input th:field="*{shipment.Cost}" id="Cost" type="number" step="0.01" placeholder="Цена товара" name="Cost"><br>
+                    <input th:field="*{shipment.expirationdate}" id="expirationdate" type="date"  placeholder="Срок годности" name="expirationdate"><br>
+                    <input th:field="*{storages.amount}" id="amount" type="number"  placeholder="Количество товара" name="amount"><br>
+                    <select name="listSuppliers">
+                        <div th:each="element : ${listSuppliers}">
+                            <option th:value="${element.id}" th:text="${element.suppliername}"></option>
+                        </div>
+                    </select>
+                    <br>
+                    <button type="submit" class="btn btn-danger"  >Добавить товар</button>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div class="card-body text-center card shadow-2-strong justify-content-center align-items-center">
+<div class="form-horizontal card-body" >
+    <div class="container text-center" >
+        <div class="row">
+            <div class="col">
+                Наименование товара
+            </div>
+            <div class="col">
+                Дата поставки
+            </div>
+            <div class="col">
+              Количество
+            </div>
+        </div>
+    </div>
+    <div class="container text-center" th:each="el: ${storage}">
+        <div class="row">
+            <div class="col">
+                <p th:text="${el.shipments.shipmentname}"> </p>
+            </div>
+            <div class="col">
+                <p th:text="${el.supplies.dateofsupply}"> </p>
+            </div>
+            <div class="col">
+                <p th:text="${el.amount}">
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+<!--<nav aria-label="Page navigation example">-->
+<!--    <ul class="pagination">-->
+<!--        <li class="page-item"><a class="page-link" value="" href="#">Previous</a></li>-->
+<!--        <span th:each="i: ${#numbers.sequence(1,totalpages)}">-->
+<!--        <li class="page-item"><a class="page-link" href="/Supp" >[[${i}]]</a> </li>-->
+<!--        </span>-->
+<!--        <li class="page-item"><a class="page-link" href="#">Next</a></li>-->
+<!--    </ul>-->
+<!--</nav>-->
+</body>
+
+</html>

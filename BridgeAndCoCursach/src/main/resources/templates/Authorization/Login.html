@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <title>Логин </title>
+</head>
+<body style="background: linear-gradient(to right, #ee7724, #c0fa0d, #bedd36, #b44593)" >
+<div th:insert="Header/header :: headerBase"></div>
+
+<div class="card-body p-5 text-center card shadow-2-strong col-12 col-md-8 col-lg-6 col-xl-5 d-flex justify-content-center align-items-center h-100 container py-5 h-100 vh-100" >
+    <div th:if="${param.error}" class="form-outline mb-4">
+        Неправильный логин или пароль
+    </div>
+    <div th:if="${param.logout}" class="form-outline mb-4">
+        Вы вышли из аккаунта
+    </div >
+<form th:action="@{/Authorization/Login}" method="post">
+    <div class="form-outline mb-4">
+        <label class="form-label" for="form3Example3">Логин</label>
+        <input type="text" id="form3Example3" class="form-control form-control-lg"
+               placeholder="Введите логин" name="username"/>
+
+    </div>
+    <div class="form-outline mb-4">
+        <label class="form-label" for="form3Example5">Пароль</label>
+        <input type="password" id="form3Example5" class="form-control form-control-lg"
+               placeholder="Введите пароль" name="password"/>
+
+    </div>
+    <div class="form-outline mb-4"><input type="submit" value="Авторизироваться" class="btn btn-success"/></div>
+    <a href="/Authorization/Registration" class="btn btn-success"> Регистрация</a>
+</form>
+
+</div>
+</body>
+
+</html>
