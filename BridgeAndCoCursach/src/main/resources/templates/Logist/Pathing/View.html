@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bridges&CO</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src='<c:url value="/resources/js/jquery-1.9.1.js" />'></script>
+  <script type="text/javascript" src='<c:url value="/resources/js/bootstrap.js" />'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.14.0/jquery.validate.min.js"></script>
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .b-example-divider {
+      height: 3rem;
+      background-color: rgba(0, 0, 0, .1);
+      border: solid rgba(0, 0, 0, .15);
+      border-width: 1px 0;
+      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+      flex-shrink: 0;
+      width: 1.5rem;
+      height: 100vh;
+    }
+
+    .bi {
+      vertical-align: -.125em;
+      fill: currentColor;
+    }
+
+    .nav-scroller {
+      position: relative;
+      z-index: 2;
+      height: 2.75rem;
+      overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+      display: flex;
+      flex-wrap: nowrap;
+      padding-bottom: 1rem;
+      margin-top: -1px;
+      overflow-x: auto;
+      text-align: center;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+  </style>
+  <script>
+
+  </script>
+</head>
+<body style="background: linear-gradient(to right, #ee7724, #c0fa0d, #bedd36, #b44593)">
+<div th:insert="Header/header :: headerLogist"></div>
+
+<div class="row mb-5 text-center" >
+  <div class="col-5 themed-grid-col card shadow-3-strong container" th:if="${#lists.isEmpty(order)}" >
+    У вас нету заказов
+  </div>
+  <div class="col-5 themed-grid-col card shadow-3-strong container" th:each="el: ${order}" th:if="${el.status}!='Отменён' AND ${el.status}!='Оплачен'">
+    <!--        <div th:if="${#lists.isEmpty(el.get(5))}">-->
+
+    <div class="form-control">
+      <h3>Название товара:</h3>
+
+    </div >
+
+    <p th:text="${el.storages.shipments.shipmentname}"> </p>    <div class="form-control">
+    <h3>Клиент:</h3>
+
+
+    <div th:each="ep: ${el.users}">
+    <p th:text="${ep.surname} "> </p>  <p th:text="${ep.name} "> </p>  <p th:text="${ep.patronymic} "> </p>
+    </div>
+    <div class="form-control">
+      <h3>Количество товаров в заказе:</h3>
+
+    </div>
+    <p th:text="${el.amount}"> </p>
+    <div class="form-control">
+      <h3>На сумму:</h3>
+
+    </div>
+    <p th:text="${el.summary}"> </p>
+    <div class="form-control">
+      <h3>Статус</h3>
+
+    </div>
+    <p th:text="${el.status}"> </p>
+    <div class="row mb-3 justify-content-md-center row-cols-1">
+      <div class="col-md-auto">
+
+      </div>
+      <div class="col-md-auto">
+        <a  class="btn btn-info"   data-toggle="modal" th:data-target="${'#pathdetail'+el.id}" >Текущий маршрут</a>
+        <a  class="btn btn-info"   data-toggle="modal" th:data-target="${'#path'+el.id}" >Составить маршрут</a>
+
+          <div class="modal" th:id="${'path'+el.id}">-->
+
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Составить маршрут</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                  <form method="post" th:action="'/Logist/Pathing/Edit/'+${el.id}">
+
+
+                    <button type="submit" class="btn btn-danger"   > Сохранить маршрут</button>
+                  </form>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        <div class="modal" th:id="${'pathdetail'+el.id}">-->
+
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4 class="modal-title">Составить маршрут</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <!-- Modal body -->
+              <div class="modal-body">
+
+
+                  <div class="form-control">
+                    <h3>Адресс доставки</h3>
+
+                  </div>
+                  <p th:text="${el.pathing.adress}"> </p>
+                  <div class="form-control">
+                    <h3>Предполагаемый транспорт для передвижения</h3>
+
+                  </div>
+                  <p th:text="${el.pathing.transport}"> </p>
+                <div class="form-control">
+                  <h3>Предполагаемое время в пути</h3>
+
+                </div>
+                <p th:text="${el.pathing.path_time}"> </p>
+                <div class="form-control">
+                  <h3>Предполагаемая стоимость пути</h3>
+
+                </div>
+                <p th:text="${el.pathing.pathcost}"> </p>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</div>
+</body>
+</html>

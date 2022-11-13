@@ -69,7 +69,7 @@
 <div th:insert="Header/header :: headerClient"></div>
 <div class="row mb-5 text-center" >
     <div class="col-5 themed-grid-col card shadow-3-strong container" th:if="${#lists.isEmpty(order)}" >
-        У вас нету заказов
+       Пока активных заказов нет
     </div>
     <div class="col-5 themed-grid-col card shadow-3-strong container" th:each="el: ${order}" >
 <!--        <div th:if="${#lists.isEmpty(el.get(5))}">-->
@@ -130,6 +130,7 @@
 
     </div>
 
+</div>
 </div>
 </body>
 </html>

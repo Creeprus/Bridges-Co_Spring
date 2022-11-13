@@ -23,6 +23,7 @@ public class PathingServiceImp implements PathingService{
             pathing.get().setPath_time(Request.getPath_time());
             pathing.get().setAdress(Request.getAdress());
             pathing.get().setTransport(Request.getTransport());
+            pathing.get().setPathcost(Request.getPathcost());
             pathingAPIRepository.save(pathing.get());
             return pathing;
         }

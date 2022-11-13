@@ -75,6 +75,7 @@ List <OrderShipment> orders= orderRepository.findAll();
             orderShipment.setStorages(storage);
 pathing.setPath_time("Требует назначения");
         pathing.setTransport("Требует назначения");
+        pathing.setPathcost(0.00);
             String currentuser=UserSession();
              account=accountRepository.findAccountByUsername(currentuser);
             orderShipment.setUsers( userRepository.findUserByAccount(account));
