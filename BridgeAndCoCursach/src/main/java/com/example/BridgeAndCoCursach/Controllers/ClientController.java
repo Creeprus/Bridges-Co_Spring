@@ -8,10 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -75,7 +72,7 @@ List <OrderShipment> orders= orderRepository.findAll();
         Calendar cal = Calendar.getInstance();
         Date date=cal.getTime();
         storage=storageRepository.findById(currentid).orElseThrow();
-            orderShipment.setShipments(storage.getShipments());
+            orderShipment.setStorages(storage);
 pathing.setPath_time("Требует назначения");
         pathing.setTransport("Требует назначения");
             String currentuser=UserSession();
@@ -88,6 +85,23 @@ pathing.setPath_time("Требует назначения");
         //    orderShipment.setUsers(user);
         pathingRepository.save(pathing);
             orderRepository.save(orderShipment);
+        model.addAttribute("storage",storageRepository.findAll());
+        return "redirect:/Client/Shipments/View";
+    }
+    @PostMapping("/Orders/Cancel/{id}")
+    public String OrderCancel(@PathVariable Long id, Account account , OrderShipment orderShipment, Pathing pathing, Model model)
+    {
+        orderShipment=orderRepository.findById(id).orElseThrow();
+        orderShipment.setStatus("Отменён");
+        orderRepository.save(orderShipment);
+
+
+        String currentuser=UserSession();
+        account=accountRepository.findAccountByUsername(currentuser);
+        User user=userRepository.findFirstByAccount(account);;
+        List <OrderShipment> orders= orderRepository.findAll();
+        orders.removeIf(order -> !order.getUsers().contains(user));
+        model.addAttribute("order",orders);
         return "/Client/Orders/View";
     }
 }

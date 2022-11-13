@@ -30,18 +30,16 @@ public class Shipment {
     @Column(precision = 10,scale=2)
     public Double Cost;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "shipments", fetch =FetchType.LAZY)
-    private Collection<OrderShipment> orders;
+
     @JsonIgnore
     @OneToMany(mappedBy = "shipments", fetch =FetchType.EAGER)
     private Collection<Storage> storages;
 
-    public Shipment(String shipmentname, Date expirationdate, Double cost, Collection<OrderShipment> orders, Collection<Storage> storages) {
+
+    public Shipment(String shipmentname, Date expirationdate, Double cost, Collection<Storage> storages) {
         this.shipmentname = shipmentname;
         this.expirationdate = expirationdate;
         Cost = cost;
-        this.orders = orders;
         this.storages = storages;
     }
 
@@ -80,14 +78,7 @@ public class Shipment {
     public void setCost(Double cost) {
         Cost = cost;
     }
-    @JsonIgnore
-    public Collection<OrderShipment> getOrders() {
-        return orders;
-    }
 
-    public void setOrders(Collection<OrderShipment> orders) {
-        this.orders = orders;
-    }
     @JsonIgnore
     public Collection<Storage> getStorages() {
         return storages;

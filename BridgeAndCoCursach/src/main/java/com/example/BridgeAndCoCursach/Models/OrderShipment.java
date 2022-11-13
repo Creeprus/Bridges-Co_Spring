@@ -30,7 +30,7 @@ public class OrderShipment {
     private Pathing pathing;
     @JsonBackReference
     @ManyToOne(optional =true)
-    private Shipment shipments;
+    private Storage storages;
     @JsonBackReference
     @ManyToMany
     @JoinTable(name="ordershipment_user",
@@ -39,14 +39,14 @@ public class OrderShipment {
     private List<User> users;
 
 
-    public OrderShipment(Date date_of_order, Date date_of_depart, int amount, Double summary, String status, Pathing pathing, Shipment shipments, List<User> users) {
+    public OrderShipment(Date date_of_order, Date date_of_depart, int amount, Double summary, String status, Pathing pathing, Storage storages, List<User> users) {
         this.date_of_order = date_of_order;
         this.date_of_depart = date_of_depart;
         this.amount = amount;
         this.summary = summary;
         this.status = status;
         this.pathing = pathing;
-        this.shipments = shipments;
+        this.storages = storages;
         this.users = users;
     }
 
@@ -58,15 +58,17 @@ public class OrderShipment {
         this.status = status;
     }
 
-    public Shipment getShipments() {
-        return shipments;
-    }
 
-    public void setShipments(Shipment shipments) {
-        this.shipments = shipments;
-    }
 
     public OrderShipment() {
+    }
+
+    public Storage getStorages() {
+        return storages;
+    }
+
+    public void setStorages(Storage storages) {
+        this.storages = storages;
     }
 
     public Long getId() {

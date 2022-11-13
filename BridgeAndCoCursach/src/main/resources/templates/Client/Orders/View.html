@@ -68,16 +68,16 @@
 <body style="background: linear-gradient(to right, #ee7724, #c0fa0d, #bedd36, #b44593)">
 <div th:insert="Header/header :: headerClient"></div>
 <div class="row mb-5 text-center" >
-    <div class="col-5 themed-grid-col card shadow-3-strong container" th:if="${order}==null" >
+    <div class="col-5 themed-grid-col card shadow-3-strong container" th:if="${#lists.isEmpty(order)}" >
         У вас нету заказов
     </div>
     <div class="col-5 themed-grid-col card shadow-3-strong container" th:each="el: ${order}" >
-
+<!--        <div th:if="${#lists.isEmpty(el.get(5))}">-->
         <div class="form-control">
             <h3>Название товара:</h3>
 
         </div>
-        <p th:text="${el.shipments.shipmentname}"> </p>
+        <p th:text="${el.storages.shipments.shipmentname}"> </p>
         <div class="form-control">
             <h3>Количество товаров в заказе:</h3>
 
@@ -96,59 +96,39 @@
         <div class="row mb-3 justify-content-md-center row-cols-1">
             <div class="col-md-auto">
 
-                <a  class="btn btn-info"   data-toggle="modal" th:data-target="${'#detailshipment'+el.id}" >Просмотреть информацию о заказе</a>
-                <div class="modal" th:id="${'detailshipment'+el.id}">
-
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <!-- Modal Header -->
-                            <div class="modal-header">
-                                <h4 class="modal-title">Информация о товаре</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <!-- Modal body -->
-                            <div class="modal-body">
-
-
-                                <h5 class="">
-                                    Наименование товара
-                                </h5>
-                                <p th:text="${el.shipments.shipmentname}"> </p>
-                                <h5 class="">
-                                    Стоимость
-                                </h5>
-                                <p th:text="${el.shipments.Cost}"> </p>
-                                <h5 class="">
-                                    Срок годности (до)
-                                </h5>
-                                <p th:text="${el.shipments.expirationdate}"> </p>
-                                <h5 class="">
-                                    Количество товара
-                                </h5>
-                                <p th:text="${el.amount}"> </p>
-
-                                <br>
-
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
             </div>
             <div class="col-md-auto">
+                <div th:if="${el.status}!='Отменён'">
+                <a  class="btn btn-danger"   data-toggle="modal" th:data-target="${'#cancelorder'+el.id}" >Отменить заказ</a>
+                <div class="modal" th:id="${'cancelorder'+el.id}">-->
 
-<!--                <a  class="btn btn-success"   data-toggle="modal" th:data-target="${'#cancelorder'+el.id}" >Отменить заказ</a>-->
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Вы точно хотите отменить заказ?</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                    <form method="post" th:action="'/Client/Orders/Cancel/'+${el.id}">
+                                                    <button type="submit" class="btn btn-danger"   >Отменить</button>
+                                    </form>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
             </div>
-
+                </div>
 
     </div>
 
-
+    </div>
 
 </div>
 </body>

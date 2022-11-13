@@ -80,11 +80,15 @@
 
             var numOne = document.getElementById('storageamount'+id).value;
             var numTwo = document.getElementById('amount'+id).value;
+            numOne=parseInt(numOne);numTwo=parseInt(numTwo);
             const button = document.querySelector('#ordership'+id);
+            console.log("Число товаров со склада "+numOne); console.log("Число выбранных товаров клиентом "+numTwo);
             if(numTwo>numOne)
             {
                 console.log("Нельзя");
-               alert("На складе нету столько товара")
+                console.log("После условия");
+                console.log("Число товаров со склада "+numOne); console.log("Число выбранных товаров клиентом "+numTwo);
+             //  alert("На складе нету столько товара")
                 button.disabled =true;
             }
             else
@@ -105,7 +109,9 @@
                         minlength: 10,
                         maxLength:200
                     },
-
+                    amount:{
+                        min:1
+                    },
                     action: "required"
                 },
                 messages: {
@@ -114,7 +120,9 @@
                         minlength: "Минимум 10 символов",
                         maxLength: "Максимум 200 символов"
                     },
-
+                    amount:{
+                        min:"Нельзя заказать ноль товаров"
+                    },
                     action: "Please provide some data"
                 }
             });
@@ -230,7 +238,7 @@
                             <input type="hidden"  th:value="${el.shipments.Cost}" name="curretcost" th:id="cost+${el.id}">
                             <input type="hidden"  th:value="${el.id}" name="currentid">
                             <input type="hidden" th:id="storageamount+${el.id}" th:value="${el.amount}" name="">
-                            <input onchange="Differ(currentid.value)" th:field="${orderShipment.amount}" class="pass-quantity" th:id="amount+${el.id}" min="1" oninput="this.value = Math.abs(this.value)" type="number" placeholder="Количество товара" name="amount" ><br>
+                            <input  th:field="${orderShipment.amount}" class="pass-quantity" th:id="amount+${el.id}" oninput="this.value = Math.abs(this.value);Differ(currentid.value) " type="number" placeholder="Количество товара" name="amount" ><br>
 
                             <br>
                             <h5 class="">

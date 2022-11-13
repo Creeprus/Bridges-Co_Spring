@@ -20,6 +20,8 @@ public class AuthentificationSuccess implements AuthenticationSuccessHandler {
             new SimpleUrlAuthenticationSuccessHandler("/Supplier/Index");
     SimpleUrlAuthenticationSuccessHandler storagerSuccessHandler =
             new SimpleUrlAuthenticationSuccessHandler("/Storager/Index");
+    SimpleUrlAuthenticationSuccessHandler logistSuccessHandler =
+            new SimpleUrlAuthenticationSuccessHandler("/Logist/Index");
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -40,6 +42,11 @@ public class AuthentificationSuccess implements AuthenticationSuccessHandler {
             if (authorityName.equals("Кладовщик")) {
 
                 this.storagerSuccessHandler.onAuthenticationSuccess(request, response, authentication);
+                return;
+            }
+            if (authorityName.equals("Логист")) {
+
+                this.logistSuccessHandler.onAuthenticationSuccess(request, response, authentication);
                 return;
             }
         }

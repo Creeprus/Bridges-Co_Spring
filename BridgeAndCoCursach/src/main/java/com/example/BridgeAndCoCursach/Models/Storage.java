@@ -1,10 +1,12 @@
 package com.example.BridgeAndCoCursach.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 
 @Entity
 public class Storage {
@@ -21,7 +23,9 @@ public class Storage {
     @ManyToOne(optional =true)
     private Supply supplies;
 
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "storages", fetch =FetchType.LAZY)
+    private Collection<OrderShipment> orders;
 
 
     public Storage(int amount, Shipment shipments, Supply supplies) {
