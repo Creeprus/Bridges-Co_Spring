@@ -49,6 +49,7 @@ public class Account {
     public Set<Role> getRole() {
         return role;
     }
+    public String getRoleName(){return role.toString();}
 
     public void setRole(Set<Role> role) {
         this.role = role;
