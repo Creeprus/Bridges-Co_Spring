@@ -1,8 +1,11 @@
 package com.example.BridgeAndCoCursach.Controllers;
 
-import com.example.BridgeAndCoCursach.Models.Account;
-import com.example.BridgeAndCoCursach.Models.Role;
-import com.example.BridgeAndCoCursach.Repository.AccountRepository;
+import com.example.BridgeAndCoCursach.Models.*;
+import com.example.BridgeAndCoCursach.Repository.*;
+import com.example.BridgeAndCoCursach.Securing.DBManaging;
+import com.example.BridgeAndCoCursach.Service.UserService;
+import com.google.common.collect.Lists;
+import com.opencsv.CSVWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.security.access.SecurityConfig;
@@ -15,9 +18,18 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Set;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @PreAuthorize("hasAnyAuthority('Администратор')")
 @Controller
@@ -35,8 +47,17 @@ public class AdminController {
        // modelMap.addAttribute("username", name);
         return name;
     }
+    @Autowired
+    UserService service;
 @Autowired
     AccountRepository accountRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    ShipmentRepository shipmentRepository;
+    @Autowired
+    SupplierRepository supplierRepository;
+
 @GetMapping("/Index")
 public String regView(Account user, Model model)
 {
@@ -74,4 +95,122 @@ public String userEditView(@PathVariable(name="id") Long id,
     accountRepository.save(user);
     return "redirect:/Admin/Account/View";
 }
+@GetMapping ("/exportusers")
+    public void exportEmpExcel(HttpServletResponse response) throws IOException
+{response.setContentType("text/csv");
+   String filename="users.csv";
+   String headerKey="Content-Disposition";
+   String headerValue="attachment; filename="+filename;
+
+   response.setHeader(headerKey,headerValue);
+
+   List<User> listUsers=service.listAll();
+
+
+
+    // closing writer connection
+
+   Locale locale=new Locale("ru","RU");
+    response.setLocale(locale);
+    response.setCharacterEncoding("UTF-8");
+    ICsvBeanWriter csvBeanWriter=new CsvBeanWriter(response.getWriter(), CsvPreference.EXCEL_PREFERENCE);
+
+    String[] csvHeader={"id Пользователя","Имя","Фамилия","Отчество","Почта","Номер телефона"};
+   // String[] csvHeader_acc={"Логин"};
+    String[] nameMappingus={"id","name","surname","patronymic","Email","PhoneNumber"};
+
+   // String[] nameMappingac={"username"};
+    csvBeanWriter.writeHeader(csvHeader);
+   // csvBeanWriter.writeHeader(csvHeader_acc);
+    for (User user:listUsers)
+    {
+        csvBeanWriter.write(user,nameMappingus);
+
+       // csvBeanWriter.write(user.getAccount(),nameMappingac);
+    }
+
+
+    csvBeanWriter.close();
+}
+    @GetMapping ("/exportshipments")
+    public void exportShipment(HttpServletResponse response) throws IOException
+    {
+        response.setContentType("text/csv");
+        String filename="shipment.csv";
+        String headerKey="Content-Disposition";
+        String headerValue="attachment; filename="+filename;
+
+        response.setHeader(headerKey,headerValue);
+
+      List<Shipment> shipments=shipmentRepository.findAll();
+
+
+
+        // closing writer connection
+
+        Locale locale=new Locale("ru","RU");
+        response.setLocale(locale);
+        response.setCharacterEncoding("UTF-8");
+        ICsvBeanWriter csvBeanWriter=new CsvBeanWriter(response.getWriter(), CsvPreference.EXCEL_PREFERENCE);
+
+        String[] csvHeader={"id Товара","Наименование товара","Срок годности","Стоимость"};
+        // String[] csvHeader_acc={"Логин"};
+        String[] nameMappingus={"id","shipmentname","expirationdate","Cost"};
+
+        // String[] nameMappingac={"username"};
+        csvBeanWriter.writeHeader(csvHeader);
+        // csvBeanWriter.writeHeader(csvHeader_acc);
+        for (Shipment shipment:shipments)
+        {
+            csvBeanWriter.write(shipment,nameMappingus);
+
+            // csvBeanWriter.write(user.getAccount(),nameMappingac);
+        }
+
+
+        csvBeanWriter.close();
+    }
+    @GetMapping ("/exportsuppliers")
+    public void exportSuppliers(HttpServletResponse response) throws IOException
+    {
+        response.setContentType("text/csv");
+        String filename="suppliers.csv";
+        String headerKey="Content-Disposition";
+        String headerValue="attachment; filename="+filename;
+
+        response.setHeader(headerKey,headerValue);
+
+        List<Supplier> suppliers=supplierRepository.findAll();
+
+
+
+        // closing writer connection
+
+        Locale locale=new Locale("ru","RU");
+        response.setLocale(locale);
+        response.setCharacterEncoding("UTF-8");
+        ICsvBeanWriter csvBeanWriter=new CsvBeanWriter(response.getWriter(), CsvPreference.EXCEL_PREFERENCE);
+
+        String[] csvHeader={"id Поставщика","Наименование поставщика","Страна"};
+        // String[] csvHeader_acc={"Логин"};
+        String[] nameMappingus={"id","suppliername","Country"};
+
+        // String[] nameMappingac={"username"};
+        csvBeanWriter.writeHeader(csvHeader);
+        // csvBeanWriter.writeHeader(csvHeader_acc);
+        for (Supplier supplier:suppliers)
+        {
+            csvBeanWriter.write(supplier,nameMappingus);
+
+            // csvBeanWriter.write(user.getAccount(),nameMappingac);
+        }
+
+
+        csvBeanWriter.close();
+    }
+    @GetMapping ("/backup")
+    public String backup(DBManaging.DatabaseUtilBackup dbManaging) throws IOException, InterruptedException {
+        DBManaging.DatabaseUtilBackup.backup();
+        return "redirect:/Admin/Index";
+    }
 }

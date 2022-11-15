@@ -13,12 +13,31 @@
 <div class="card-body text-center card shadow-2-strong justify-content-center align-items-center">
 
 
-<figure class="figure">
-    <button class="figure-img img-fluid rounded"><h1>Экспортировать таблицу товаров</h1></button>
+
+    <form method="get" th:action="'/Admin/exportusers'">
+        <figure class="figure">
+    <button class="figure-img img-fluid rounded" type="submit" ><h1>Экспортировать таблицу пользователей</h1></button>
 </figure>
+    </form>
+
+<form method="get" th:action="'/Admin/exportshipments'">
 <figure class="figure">
-    <button class="figure-img img-fluid rounded"><h1>Экспортировать таблицу пользователей</h1></button>
+    <button class="figure-img img-fluid rounded" type="submit"><h1>Экспортировать таблицу товаров</h1></button>
 </figure>
+</form>
+
+    <form method="get" th:action="'/Admin/exportsuppliers'">
+        <figure class="figure">
+            <button class="figure-img img-fluid rounded" type="submit"><h1>Экспортировать таблицу поставщиков</h1></button>
+        </figure>
+    </form>
+
+
+    <form method="get" th:action="'/Admin/backup'">
+        <figure class="figure">
+            <button class="figure-img img-fluid rounded" type="submit"><h1>Бэкап базы данных</h1></button>
+        </figure>
+    </form>
 </div>
 </body>
 </html>
