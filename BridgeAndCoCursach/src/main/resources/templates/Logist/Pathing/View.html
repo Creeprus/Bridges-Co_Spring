@@ -106,7 +106,7 @@
   <div class="col-5 themed-grid-col card shadow-3-strong container" th:if="${#lists.isEmpty(order)}" >
     У вас нету заказов
   </div>
-  <div class="col-5 themed-grid-col card shadow-3-strong container" th:each="el: ${order}" th:if="${el.status}!='Отменён' AND ${el.status}!='Оплачен'">
+  <div class="col-5 themed-grid-col card shadow-3-strong container" th:each="el: ${order}" th:if="${el.status}!='Отменён' AND ${el.status}!='Доставлен'">
     <!--        <div th:if="${#lists.isEmpty(el.get(5))}">-->
 
     <div class="form-control">

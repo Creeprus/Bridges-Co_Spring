@@ -69,7 +69,7 @@ public class LogistController {
            userclient.set(1, user);
        }
         ordercurrent.setUsers(userclient);
-       ordercurrent.setStatus("Отправлен на сборку");
+       ordercurrent.setStatus("Отправлен в доставку");
       orderRepository.save(ordercurrent);
         return new RedirectView("/Logist/Pathing/View");
     }
