@@ -8,6 +8,12 @@
 <div th:insert="Header/header :: headerLogist"></div>
 <div class="card-body text-center card shadow-2-strong justify-content-center align-items-center">
   <h1>Добро пожаловать</h1>
+  <form method="get" th:action="'/Logist/metrics'">
+    <figure class="figure">
+      <button class="figure-img img-fluid rounded" type="submit"><h1>Динамика заказов</h1></button>
+    </figure>
+  </form>
 </div>
+
 </body>
 </html>

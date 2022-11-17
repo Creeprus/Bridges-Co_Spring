@@ -1,5 +1,8 @@
 package com.example.BridgeAndCoCursach;
 
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.aop.TimedAspect;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -11,5 +14,9 @@ public class BridgeAndCoCursachApplication {
 		SpringApplication.run(BridgeAndCoCursachApplication.class, args);
 	}
 
+	@Bean
+	public TimedAspect timedAspect(MeterRegistry registry) {
+		return new TimedAspect(registry);
+	}
 
 }

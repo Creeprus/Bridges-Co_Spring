@@ -1,5 +1,6 @@
 package com.example.BridgeAndCoCursach.Controllers;
 
+
 import com.example.BridgeAndCoCursach.Models.Shipment;
 import com.example.BridgeAndCoCursach.Models.Storage;
 import com.example.BridgeAndCoCursach.Models.Supplier;
@@ -8,8 +9,14 @@ import com.example.BridgeAndCoCursach.Repository.ShipmentRepository;
 import com.example.BridgeAndCoCursach.Repository.StorageRepository;
 import com.example.BridgeAndCoCursach.Repository.SupplierRepository;
 import com.example.BridgeAndCoCursach.Repository.SupplyRepository;
+import com.example.BridgeAndCoCursach.Service.ShipmentService;
+import com.example.BridgeAndCoCursach.Service.StorageService;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @PreAuthorize("hasAnyAuthority('Кладовщик','Администратор')")
 @Controller
@@ -31,6 +39,9 @@ public class StoragerController {
     StorageRepository storageRepository;
     @Autowired
     SupplierRepository supplierRepository;
+
+    @Autowired
+    StorageService service;
 
     @GetMapping("/Index")
     public String SupplierIndex()
@@ -145,4 +156,31 @@ storage1.getSupplies().setSupplier(supplierRepository.findById(listSuppliers).or
         model.addAttribute("suppliers",supplierRepository.findSupplierBySuppliernameContaining(name));
         return "/Storager/Suppliers/Search";
     }
+//    @Timed(value = "Storage.time", description = "Time taken to return Storage")
+//    public Storage getStorage() {
+//        return new Storage();
+//    }
+//    @Timed(value = "Supplier.time", description = "Time taken to return Supplier")
+//    public Supplier getSupplier() {
+//        return new Supplier();
+//    }
+//    @Timed(value = "Shipment.time", description = "Time taken to return Shipment")
+//    public Shipment getShipment() {
+//        return new Shipment();
+//    }
+@GetMapping("/metrics")
+public String metric(Model model)
+{
+    List<String> shipname=service.getAllStorage().stream().map(x->x.getShipments().getShipmentname()).collect(Collectors.toList());
+    List<Date> expdate=service.getAllStorage().stream().map(x->x.getShipments().getExpirationdate()).collect(Collectors.toList());
+    List<Double> cost=service.getAllStorage().stream().map(x->x.getShipments().getCost()).collect(Collectors.toList());
+    List<Integer> amount=service.getAllStorage().stream().map(x->x.getAmount()).collect(Collectors.toList());
+    List<Date> supplydate=service.getAllStorage().stream().map(x->x.getSupplies().getDateofsupply()).collect(Collectors.toList());
+    model.addAttribute("shipments",shipname);
+    model.addAttribute("expdate",expdate);
+    model.addAttribute("cost",cost);
+    model.addAttribute("amount",amount);
+    model.addAttribute("supplydate",supplydate);
+    return "/Storager/Metrics/metric";
+}
 }

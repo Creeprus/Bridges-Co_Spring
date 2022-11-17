@@ -5,7 +5,7 @@ import com.example.BridgeAndCoCursach.Repository.*;
 import com.example.BridgeAndCoCursach.Securing.DBManaging;
 import com.example.BridgeAndCoCursach.Service.UserService;
 import com.google.common.collect.Lists;
-import com.opencsv.CSVWriter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.security.access.SecurityConfig;
@@ -213,4 +213,5 @@ public String userEditView(@PathVariable(name="id") Long id,
         DBManaging.DatabaseUtilBackup.backup();
         return "redirect:/Admin/Index";
     }
+
 }

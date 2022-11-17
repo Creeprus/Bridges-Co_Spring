@@ -98,7 +98,7 @@
 
             </div>
             <div class="col-md-auto">
-                <div th:if="${el.status}!='Отменён'">
+                <div th:if="${el.status}!='Отменён' AND ${el.status}!='Доставлен'">
                 <a  class="btn btn-danger"   data-toggle="modal" th:data-target="${'#cancelorder'+el.id}" >Отменить заказ</a>
                 <div class="modal" th:id="${'cancelorder'+el.id}">-->
 
