@@ -4,17 +4,14 @@ import com.example.BridgeAndCoCursach.Models.*;
 import com.example.BridgeAndCoCursach.Repository.*;
 import com.example.BridgeAndCoCursach.Securing.DBManaging;
 import com.example.BridgeAndCoCursach.Service.UserService;
-import com.google.common.collect.Lists;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
-import org.springframework.security.access.SecurityConfig;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -24,12 +21,8 @@ import org.supercsv.prefs.CsvPreference;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @PreAuthorize("hasAnyAuthority('Администратор')")
 @Controller
@@ -63,10 +56,56 @@ public String regView(Account user, Model model)
 {
     return "/Admin/Index";
 }
+    @GetMapping("/Account/Filter/{search_name}")
+    public String userViewFilter(@PathVariable(name="search_name") Role name,Model model)
+    {
+        String a=UserSession();
+        model.addAttribute("listRole", Role.values());
+
+        model.addAttribute("listUser",accountRepository.findAccountByRole(name));
+        return "/Admin/Account/View";
+    }
+    @GetMapping("/Account/Search")
+    public String userViewSearch(@RequestParam(name="search_name") String name,Model model)
+    {
+        String a=UserSession();
+        model.addAttribute("listRole", Role.values());
+
+
+        if(name.equals(""))
+        {
+            model.addAttribute("listUser",accountRepository.findAll());
+            return "/Admin/Account/View";
+        }
+        else
+        {
+            model.addAttribute("listUser",accountRepository.findAccountByUsername(name));
+        }
+        return "/Admin/Account/View";
+    }
+
+    @GetMapping("/Account/SortAsc")
+    public String userViewSortAsc(Model model)
+    {
+        String a=UserSession();
+        model.addAttribute("listRole", Role.values());
+
+        model.addAttribute("listUser",accountRepository.findAll(Sort.by("username").ascending()));
+        return "/Admin/Account/View";
+    }
+    @GetMapping("/Account/SortDesc")
+    public String userViewSortDesc(Model model)
+    {
+        String a=UserSession();
+        model.addAttribute("listRole", Role.values());
+
+        model.addAttribute("listUser",accountRepository.findAll(Sort.by("username").descending()));
+        return "/Admin/Account/View";
+    }
     @GetMapping("/Account/View")
     public String userView(Model model)
     {
-String a=UserSession();
+        String a=UserSession();
         model.addAttribute("listRole", Role.values());
 
         model.addAttribute("listUser",accountRepository.findAll());
@@ -180,7 +219,7 @@ public String userEditView(@PathVariable(name="id") Long id,
 
         response.setHeader(headerKey,headerValue);
 
-        List<Supplier> suppliers=supplierRepository.findAll();
+        List<Supplier> suppliers= (List<Supplier>) supplierRepository.findAll();
 
 
 

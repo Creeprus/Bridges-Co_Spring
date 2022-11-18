@@ -110,7 +110,7 @@
 
                     <input th:field="*{supplier.suppliername}"  id="suppliername" type="text" placeholder="Поставщик" name="suppliername" ><br>
 
-                    <input th:field="*{supplier.Country}" id="Country" type="text"  placeholder="Страна" name="Country"><br>
+                    <input th:field="*{supplier.country}" id="Country" type="text"  placeholder="Страна" name="country"><br>
 
 
                     <br>
@@ -159,9 +159,13 @@
             <div class="row justify-content-md-center">
                 <div class="col">
                     Поставщик
+                    <a href="/Storager/Supplier/SortAsc">↑</a>
+                    <a href="/Storager/Supplier/SortDesc">↓</a>
                 </div>
                 <div class="col">
                     Страна
+                    <a href="/Storager/Country/SortAsc">↑</a>
+                    <a href="/Storager/Country/SortDesc">↓</a>
                 </div>
 
                 <div class="col ">
@@ -179,7 +183,7 @@
                     <p th:text="${el.suppliername}"> </p>
                 </div>
                 <div class="col">
-                    <p th:text="${el.Country}"> </p>
+                    <p th:text="${el.country}"> </p>
                 </div>
 
                 <div class="col ">
@@ -210,7 +214,7 @@
                                 <h5 class="">
                                     Страна
                                 </h5>
-                                <input type="text" id="Country" th:value="${el.Country}" name="Country"> </input>
+                                <input type="text" id="Country" th:value="${el.country}" name="country"> </input>
 
                                 <br>
                                 <button type="submit" class="btn btn-danger"  >Изменить поставщика</button>
@@ -244,7 +248,7 @@
                                 <h5 class="">
                                     Страна
                                 </h5>
-                                <p type="text"  th:text="${el.Country}" > </p>
+                                <p type="text"  th:text="${el.country}" > </p>
 
                                 <br>
                             <a th:href="'/Storager/Suppliers/Delete/' +${el.id}" class="btn btn-danger">Удалить</a>

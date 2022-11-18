@@ -15,6 +15,7 @@ import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -56,6 +57,66 @@ public class StoragerController {
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
         model.addAttribute("storage",storageRepository.findAll());
+        return "/Storager/Storage/View";
+    }
+    @GetMapping("/Shipment/SortAsc")
+    public String StoragerSortAscShipment(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
+    {
+
+        model.addAttribute("listSuppliers",supplierRepository.findAll());
+        model.addAttribute("storages",storages);
+        model.addAttribute("shipment",shipment);
+        model.addAttribute("storage",storageRepository.findAll(Sort.by("shipments.shipmentname").ascending()));
+        return "/Storager/Storage/View";
+    }
+    @GetMapping("/Shipment/SortDesc")
+    public String StoragerSortDescShipment(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
+    {
+
+        model.addAttribute("listSuppliers",supplierRepository.findAll());
+        model.addAttribute("storages",storages);
+        model.addAttribute("shipment",shipment);
+        model.addAttribute("storage",storageRepository.findAll(Sort.by("shipments.shipmentname").descending()));
+        return "/Storager/Storage/View";
+    }
+    @GetMapping("/Date/SortDesc")
+    public String StoragerSortDescDate(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
+    {
+
+        model.addAttribute("listSuppliers",supplierRepository.findAll());
+        model.addAttribute("storages",storages);
+        model.addAttribute("shipment",shipment);
+        model.addAttribute("storage",storageRepository.findAll(Sort.by("supplies.dateofsupply").descending()));
+        return "/Storager/Storage/View";
+    }
+    @GetMapping("/Date/SortAsc")
+    public String StoragerSortAscDate(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
+    {
+
+        model.addAttribute("listSuppliers",supplierRepository.findAll());
+        model.addAttribute("storages",storages);
+        model.addAttribute("shipment",shipment);
+        model.addAttribute("storage",storageRepository.findAll(Sort.by("supplies.dateofsupply").ascending()));
+        return "/Storager/Storage/View";
+    }
+    @GetMapping("/Amount/SortAsc")
+    public String StoragerSortAscAmount(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
+    {
+
+        model.addAttribute("listSuppliers",supplierRepository.findAll());
+        model.addAttribute("storages",storages);
+        model.addAttribute("shipment",shipment);
+        model.addAttribute("storage",storageRepository.findAll(Sort.by("amount").ascending()));
+        return "/Storager/Storage/View";
+    }
+    @GetMapping("/Amount/SortDesc")
+    public String StoragerSortDescAmount(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
+    {
+
+        model.addAttribute("listSuppliers",supplierRepository.findAll());
+        model.addAttribute("storages",storages);
+        model.addAttribute("shipment",shipment);
+        model.addAttribute("storage",storageRepository.findAll(Sort.by("amount").descending()));
         return "/Storager/Storage/View";
     }
     @PostMapping("/Storage/Edit/{id}")
@@ -106,13 +167,45 @@ storage1.getSupplies().setSupplier(supplierRepository.findById(listSuppliers).or
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
 
-        return "/Storager/Storage/Search";
+        return "/Storager/Storage/View";
     }
     @GetMapping("/Suppliers/View")
     public String SuppliersView(Supplier supplier, Model model)
     {
 
         model.addAttribute("suppliers",supplierRepository.findAll());
+
+        return "/Storager/Suppliers/View";
+    }
+    @GetMapping("/Supplier/SortAsc")
+    public String SuppliersSortAscSupplier(Supplier supplier, Model model)
+    {
+
+        model.addAttribute("suppliers",supplierRepository.findAll(Sort.by("suppliername").ascending()));
+
+        return "/Storager/Suppliers/View";
+    }
+    @GetMapping("/Supplier/SortDesc")
+    public String SuppliersSortDescSupplier(Supplier supplier, Model model)
+    {
+
+        model.addAttribute("suppliers",supplierRepository.findAll(Sort.by("suppliername").descending()));
+
+        return "/Storager/Suppliers/View";
+    }
+    @GetMapping("/Country/SortAsc")
+    public String SuppliersSortAscCountry(Supplier supplier, Model model)
+    {
+
+        model.addAttribute("suppliers",supplierRepository.findAll(Sort.by("country").ascending()));
+
+        return "/Storager/Suppliers/View";
+    }
+    @GetMapping("/Country/SortDesc")
+    public String SuppliersSortDescCountry(Supplier supplier, Model model)
+    {
+
+        model.addAttribute("suppliers",supplierRepository.findAll(Sort.by("country").descending()));
 
         return "/Storager/Suppliers/View";
     }
@@ -153,8 +246,13 @@ storage1.getSupplies().setSupplier(supplierRepository.findById(listSuppliers).or
     public String SuppliersSearch( Supplier supplier,@RequestParam(name="search_name") String name,
                                    Model model)
     {
+        if(supplierRepository.findSupplierBySuppliernameContaining(name).size()==0)
+        {
+            model.addAttribute("suppliers",supplierRepository.findAll());
+            return "/Storager/Suppliers/View";
+        }
         model.addAttribute("suppliers",supplierRepository.findSupplierBySuppliernameContaining(name));
-        return "/Storager/Suppliers/Search";
+        return "/Storager/Suppliers/View";
     }
 //    @Timed(value = "Storage.time", description = "Time taken to return Storage")
 //    public Storage getStorage() {

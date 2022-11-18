@@ -20,7 +20,7 @@ public class UserService {
    public List<User> listAll()
    {
 
-       return repo.findAll();
+       return (List<User>) repo.findAll();
    }
 
 }

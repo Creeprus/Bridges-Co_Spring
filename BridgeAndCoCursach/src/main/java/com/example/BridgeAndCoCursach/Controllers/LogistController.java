@@ -6,6 +6,7 @@ import com.example.BridgeAndCoCursach.Repository.PathingRepository;
 import com.example.BridgeAndCoCursach.Repository.UserRepository;
 import com.example.BridgeAndCoCursach.Service.OrderShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,8 +47,44 @@ public class LogistController {
         model.addAttribute("order",orders);
             return "Logist/Pathing/View";
     }
+    @GetMapping("/Filter/{search_name}")
+    public String userViewFilter(@PathVariable(name="search_name") String name,Model model)
+    {
+        model.addAttribute("couriers", userRepository.findAll());
+        model.addAttribute("roleClient", Role.values());
+        Iterable<OrderShipment> orders= orderRepository.findByStatus(name);
+        model.addAttribute("order",orders);
+        return "Logist/Pathing/View";
+    }
+    @GetMapping("/Search")
+    public String ShipmentSearch(@RequestParam(name="search_name1") String name1,@RequestParam(name="search_name2") String name2,Model model)
+    {
+        model.addAttribute("couriers", userRepository.findAll());
+        model.addAttribute("roleClient", Role.values());
+        Iterable<OrderShipment> orders= orderRepository.findOrderShipmentByStoragesShipmentsShipmentnameAndPathingAdress(name1,name2);
+        model.addAttribute("order",orders);
+        return "Logist/Pathing/View";
+    }
+    @GetMapping("/SearchShip")
+    public String ShipmentSearch(@RequestParam(name="search_name3") String name3,Model model)
+    {
+        model.addAttribute("couriers", userRepository.findAll());
+        model.addAttribute("roleClient", Role.values());
+        Iterable<OrderShipment> orders= orderRepository.findOrderShipmentByStoragesShipmentsShipmentname(name3);
+        model.addAttribute("order",orders);
+        return "Logist/Pathing/View";
+    }
+    @GetMapping("/SearchAdr")
+    public String AdressSearch(@RequestParam(name="search_name4") String name4,Model model)
+    {
+        model.addAttribute("couriers", userRepository.findAll());
+        model.addAttribute("roleClient", Role.values());
+        Iterable<OrderShipment> orders= orderRepository.findOrderShipmentByPathingAdress(name4);
+        model.addAttribute("order",orders);
+        return "Logist/Pathing/View";
+    }
     @PostMapping("/Pathing/Edit/{id}")
-    public  ModelAndView pathingEdit(@PathVariable(name="id") Long id, Account account , OrderShipment orderShipment, Pathing pathing, Model model)
+    public  RedirectView pathingEdit(@PathVariable(name="id") Long id, Account account , OrderShipment orderShipment, Pathing pathing, Model model)
     {
         orderShipment = orderRepository.findById(id).orElseThrow();
 
@@ -58,7 +95,7 @@ public class LogistController {
         model.addAttribute("roleClient", Role.values());
         Iterable<OrderShipment> orders= orderRepository.findAll();
         model.addAttribute("order",orders);
-        return new ModelAndView("/Logist/Pathing/View");
+        return new RedirectView("/Logist/Pathing/View");
     }
     @PostMapping("/Courier/Order/{id}")
     public  RedirectView SetCourier(@PathVariable(name="id") Long id,

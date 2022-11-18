@@ -16,7 +16,7 @@ public class Supplier {
     @NotNull
     @NotBlank(message="Поле не должно быть пустым")
     @Size(min=2,max=50,message="Поле должно содержать не менeе 2 и не более 50 символов")
-    public String Country;
+    public String country;
     @NotNull
     @NotBlank(message="Поле не должно быть пустым")
     @Size(min=2,max=100,message="Поле должно содержать не менeе 2 и не более 50 символов")
@@ -26,7 +26,7 @@ public class Supplier {
     private Collection<Supply> supplies;
 
     public Supplier(String country, String supplier_Name, Collection<Supply> supplies) {
-        Country = country;
+        this.country = country;
         suppliername = supplier_Name;
         this.supplies = supplies;
     }
@@ -43,11 +43,11 @@ public class Supplier {
     }
 
     public String getCountry() {
-        return Country;
+        return country;
     }
 
     public void setCountry(String country) {
-        Country = country;
+        this.country = country;
     }
 
     public String getSuppliername() {

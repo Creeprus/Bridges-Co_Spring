@@ -10,6 +10,7 @@ import java.util.List;
 public interface ShipmentRepository extends CrudRepository<Shipment,Long> {
     List<Shipment> findShipmentByShipmentnameContaining(String name);
     List<Shipment> findAll(Sort sort);
+
     ArrayList<Shipment> findAll();
     List<Shipment> findShipmentByShipmentnameContainingOrderByShipmentnameAsc(String name);
 }

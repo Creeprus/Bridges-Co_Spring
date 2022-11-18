@@ -101,11 +101,18 @@
 </head>
 <body style="background: linear-gradient(to right, #ee7724, #c0fa0d, #bedd36, #b44593)">
 <div th:insert="Header/header :: headerLogist"></div>
-
+<a  class="btn btn-success "   data-toggle="modal" data-target="#searchorder" >Поиск</a>
+Фильтровать по:
+<!--    <a  class="btn btn-light"  th:href="'/Admin/Account/Filter/'+'Доставлен'"  >Доставленным заказам</a>-->
+<!--    <a  class="btn btn-light " th:href="'/Admin/Account/Filter/'+'Отменён'" >Отменённым заказам</a>-->
+<a  class="btn btn-light " th:href="'/Logist/Filter/'+'В обработке'">Заказам в обработке</a>
+<a class="btn btn-light "  th:href="'/Logist/Filter/'+'Отправлен в доставку'" >Заказам, отправленных в доставку</a>
 <div class="row mb-5 text-center" >
   <div class="col-5 themed-grid-col card shadow-3-strong container" th:if="${#lists.isEmpty(order)}" >
     У вас нету заказов
   </div>
+
+
   <div class="col-5 themed-grid-col card shadow-3-strong container" th:each="el: ${order}" th:if="${el.status}!='Отменён' AND ${el.status}!='Доставлен'">
     <!--        <div th:if="${#lists.isEmpty(el.get(5))}">-->
 
@@ -197,6 +204,43 @@
               </div>
 
             </div>
+          </div>
+          <div class="modal" th:id="${'searchorder'}">-->
+
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                          <h4 class="modal-title">Составить маршрут</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      <!-- Modal body -->
+                      <div class="modal-body">
+
+<form method="get" th:action="'/Logist/Search'" >
+    <input type="text" name="search_name1" placeholder="Товар"><br>
+    <input type="text" name="search_name2" placeholder="Адресс"><br>
+    <button type="submit" class="btn btn-danger"  >Найти заказ</button>
+</form>
+                          <form method="get" th:action="'/Logist/SearchAdr'" >
+
+                              <input type="text" name="search_name4" placeholder="Адресс"><br>
+                              <button type="submit" class="btn btn-danger"  >Найти заказ</button>
+                          </form>
+                          <form method="get" th:action="'/Logist/SearchShip'" >
+
+                              <input type="text" name="search_name3" placeholder="Товар"><br>
+                              <button type="submit" class="btn btn-danger"  >Найти заказ</button>
+                          </form>
+                          <div class="modal-footer">
+                              <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                          </div>
+
+                      </div>
+
+                  </div>
+
+              </div>
           </div>
         <div class="modal" th:id="${'pathdetail'+el.id}">-->
 

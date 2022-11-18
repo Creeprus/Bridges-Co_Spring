@@ -67,6 +67,12 @@
 </head>
 <body style="background: linear-gradient(to right, #ee7724, #c0fa0d, #bedd36, #b44593)">
 <div th:insert="Header/header :: headerClient"></div>
+Фильтровать по:
+    <a  class="btn btn-light"  th:href="'/Client/Orders/Filter/'+'Доставлен'"  >Доставленным заказам</a>
+    <a  class="btn btn-light " th:href="'/Client/Orders/Filter/'+'Отменён'" >Отменённым заказам</a>
+<a  class="btn btn-light " th:href="'/Client/Orders/Filter/'+'В обработке'">Заказам в обработке</a>
+<a class="btn btn-light "  th:href="'/Client/Orders/Filter/'+'Отправлен в доставку'" >Заказам, отправленных в доставку</a>
+
 <div class="row mb-5 text-center" >
     <div class="col-5 themed-grid-col card shadow-3-strong container" th:if="${#lists.isEmpty(order)}" >
        Пока активных заказов нет

@@ -52,7 +52,7 @@ public class CourierController {
         String currentuser=UserSession();
         account=accountRepository.findAccountByUsername(currentuser);
         User user=userRepository.findFirstByAccount(account);;
-        List<OrderShipment> orders= orderRepository.findAll();
+        List<OrderShipment> orders= (List<OrderShipment>) orderRepository.findAll();
         orders.removeIf(order -> !order.getUsers().contains(user));
         model.addAttribute("order",orders);
         return "/Courier/Orders";
@@ -68,7 +68,7 @@ public class CourierController {
         String currentuser=UserSession();
         account=accountRepository.findAccountByUsername(currentuser);
         User user=userRepository.findFirstByAccount(account);;
-        List<OrderShipment> orders= orderRepository.findAll();
+        List<OrderShipment> orders= (List<OrderShipment>) orderRepository.findAll();
         orders.removeIf(order -> !order.getUsers().contains(user));
         model.addAttribute("order",orders);
         return "/Courier/Orders";

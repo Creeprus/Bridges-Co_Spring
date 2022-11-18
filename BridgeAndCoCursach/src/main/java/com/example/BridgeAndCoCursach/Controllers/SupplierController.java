@@ -63,6 +63,66 @@ public class SupplierController {
         model.addAttribute("storage",storageRepository.findAll());
         return "/Supplier/View";
     }
+    @GetMapping("/Amount/SortDesc")
+    public String SupplierSortDescAmount(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
+    {
+
+        model.addAttribute("listSuppliers",supplierRepository.findAll());
+        model.addAttribute("storages",storages);
+        model.addAttribute("shipment",shipment);
+        model.addAttribute("storage",storageRepository.findAll(Sort.by("amount").descending()));
+        return "/Supplier/View";
+    }
+    @GetMapping("/Amount/SortAsc")
+    public String SupplierSortAscAmount(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
+    {
+
+        model.addAttribute("listSuppliers",supplierRepository.findAll());
+        model.addAttribute("storages",storages);
+        model.addAttribute("shipment",shipment);
+        model.addAttribute("storage",storageRepository.findAll(Sort.by("amount").ascending()));
+        return "/Supplier/View";
+    }
+    @GetMapping("/Date/SortDesc")
+    public String SupplierSortDescDate(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
+    {
+
+        model.addAttribute("listSuppliers",supplierRepository.findAll());
+        model.addAttribute("storages",storages);
+        model.addAttribute("shipment",shipment);
+        model.addAttribute("storage",storageRepository.findAll(Sort.by("supplies.dateofsupply").descending()));
+        return "/Supplier/View";
+    }
+    @GetMapping("/Date/SortAsc")
+    public String SupplierSortAscDate(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
+    {
+
+        model.addAttribute("listSuppliers",supplierRepository.findAll());
+        model.addAttribute("storages",storages);
+        model.addAttribute("shipment",shipment);
+        model.addAttribute("storage",storageRepository.findAll(Sort.by("supplies.dateofsupply").ascending()));
+        return "/Supplier/View";
+    }
+    @GetMapping("/Shipment/SortAsc")
+    public String SupplierSortAscShipment(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
+    {
+
+        model.addAttribute("listSuppliers",supplierRepository.findAll());
+        model.addAttribute("storages",storages);
+        model.addAttribute("shipment",shipment);
+        model.addAttribute("storage",storageRepository.findAll(Sort.by("shipments.shipmentname").ascending()));
+        return "/Supplier/View";
+    }
+    @GetMapping("/Shipment/SortDesc")
+    public String SupplierSortDescShipment(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
+    {
+
+        model.addAttribute("listSuppliers",supplierRepository.findAll());
+        model.addAttribute("storages",storages);
+        model.addAttribute("shipment",shipment);
+        model.addAttribute("storage",storageRepository.findAll(Sort.by("shipments.shipmentname").descending()));
+        return "/Supplier/View";
+    }
     @PostMapping("/Add")
     public String ShipmentAdd( Shipment shipment,
                                 Storage storage,
@@ -115,7 +175,7 @@ public class SupplierController {
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
 
-        return "/Supplier/Filter";
+        return "/Supplier/View";
     }
 
     @GetMapping("/SortAsc")
@@ -142,7 +202,7 @@ public class SupplierController {
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
 
-        return "/Supplier/Sort";
+        return "/Supplier/View";
     }
     @GetMapping("/SortDesc")
     public String SupplierSortDesc( Storage storages, Shipment shipment, Supply supplies,Model model)
@@ -168,6 +228,6 @@ public class SupplierController {
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
 
-        return "/Supplier/Sort";
+        return "/Supplier/View";
     }
 }

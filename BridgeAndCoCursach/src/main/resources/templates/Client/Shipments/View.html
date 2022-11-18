@@ -132,7 +132,7 @@
 <body style="background: linear-gradient(to right, #ee7724, #c0fa0d, #bedd36, #b44593)">
 <div th:insert="Header/header :: headerClient"></div>
 <div class="row mb-5 text-center" >
-
+    <a  class="btn btn-success "   data-toggle="modal" data-target="#searchuser" >Поиск</a>
     <div class="col-5 themed-grid-col card shadow-3-strong container" th:each="el: ${storage}">
 
         <div class="form-control">
@@ -186,7 +186,7 @@
                             <h5 class="">
                                 Страна поставщика
                             </h5>
-                            <p th:text="${el.supplies.supplier.Country}"> </p>
+                            <p th:text="${el.supplies.supplier.country}"> </p>
                             <br>
 
                             <div class="modal-footer">
@@ -258,7 +258,35 @@
 
             </div>
         </div>
+        <div class="modal" id="searchuser">
 
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Поиск товара</h4>
+
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        <form method="get" th:action="'/Client/SearchShip'" >
+                            <input type="text" name="search_name" placeholder="Товар"><br>
+
+
+                            <button type="submit" class="btn btn-danger"  >Найти товар</button>
+                        </form>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                            </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
     </div>
 
 

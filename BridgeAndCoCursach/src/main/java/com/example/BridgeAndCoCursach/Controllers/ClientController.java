@@ -3,6 +3,7 @@ package com.example.BridgeAndCoCursach.Controllers;
 import com.example.BridgeAndCoCursach.Models.*;
 import com.example.BridgeAndCoCursach.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,13 +56,41 @@ public class ClientController {
         model.addAttribute("storage",storageRepository.findAll());
         return "/Client/Shipments/View";
     }
+    @GetMapping("/SearchShip")
+    public String userViewSearch(@RequestParam(name="search_name") String name,Account user, OrderShipment orderShipment, Pathing pathing,Model model)
+    {
+
+
+
+        if(name.equals(""))
+        {
+            model.addAttribute("storage",storageRepository.findAll());
+            return "/Client/Shipments/View";
+        }
+        else
+        {
+            model.addAttribute("storage",storageRepository.findStorageByShipmentsShipmentname(name));
+        }
+        return "/Client/Shipments/View";
+    }
     @GetMapping("/Orders/View")
     public String OrderView(Account account , OrderShipment orderShipment, Pathing pathing, Model model)
     {
         String currentuser=UserSession();
         account=accountRepository.findAccountByUsername(currentuser);
        User user=userRepository.findFirstByAccount(account);;
-List <OrderShipment> orders= orderRepository.findAll();
+List <OrderShipment> orders= (List<OrderShipment>) orderRepository.findAll();
+        orders.removeIf(order -> !order.getUsers().contains(user));
+        model.addAttribute("order",orders);
+        return "/Client/Orders/View";
+    }
+    @GetMapping("/Orders/Filter/{search_name}")
+    public String OrderFilter(@PathVariable(name="search_name") String name, Account account , OrderShipment orderShipment, Pathing pathing, Model model)
+    {
+        String currentuser=UserSession();
+        account=accountRepository.findAccountByUsername(currentuser);
+        User user=userRepository.findFirstByAccount(account);;
+        List <OrderShipment> orders= (List<OrderShipment>) orderRepository.findByStatus(name);
         orders.removeIf(order -> !order.getUsers().contains(user));
         model.addAttribute("order",orders);
         return "/Client/Orders/View";
@@ -100,7 +129,7 @@ pathing.setPath_time("Требует назначения");
         String currentuser=UserSession();
         account=accountRepository.findAccountByUsername(currentuser);
         User user=userRepository.findFirstByAccount(account);;
-        List <OrderShipment> orders= orderRepository.findAll();
+        List <OrderShipment> orders= (List<OrderShipment>) orderRepository.findAll();
         orders.removeIf(order -> !order.getUsers().contains(user));
         model.addAttribute("order",orders);
         return "/Client/Orders/View";
