@@ -57,7 +57,7 @@ public class RegistrationController {
         if( accountRepository.findAccountByUsername(account.getUsername())!=null)
         {
             model.addAttribute("error","Такой пользователь уже существует");
-            return "/Athorization/Registration";
+            return "Authorization/Registration";
         }
 
             account.setActive(true);

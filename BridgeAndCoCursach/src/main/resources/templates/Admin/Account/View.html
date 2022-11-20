@@ -80,27 +80,30 @@
 
 <div class="container  card-body text-center  align-items-center card shadow-2-strong ">
 
-    <div class="">
-        <div class="row">
-            <div class="col">
+    <table class="table table-hover table-light">
+   <thead>
+   <tr>
+            <td>
                 Логин
                 <a href="/Admin/Account/SortAsc">↑</a>
                 <a href="/Admin/Account/SortDesc">↓</a>
-            </div>
-            <div class="col">
+            </td>
+            <td>
                Роль
 
-            </div>
-            <div class="col">
+            </td>
+            <td >
 
-            </div>
-
-        </div>
+            </td>
+   </tr>
+   </thead>
+        <tbody>
         <div  class="row form-outline" th:each="el: ${listUser}">
-            <div class="col"> <p   th:text="${el.username}"> </p></div>
-            <div class="col"> <p th:text="${el.role}"> </p></div>
+            <tr>
+            <td > <p   th:text="${el.username}"> </p></td>
+            <td class="col"> <p th:text="${el.role}"> </p></td>
 
-            <div class="col">   <a  class="btn btn-success edit"   data-toggle="modal" th:data-target="${'#edituser'+el.id}" > Назначить роль</a></div>
+            <td class="col">   <a  class="btn btn-success edit"   data-toggle="modal" th:data-target="${'#edituser'+el.id}" > Назначить роль</a></td>
 
 
             <div class="modal" th:id="${'edituser'+el.id}">
@@ -140,7 +143,9 @@
             </div>
 
             </div>
-        </div>
+        </tr>
+        </tbody>
+    </table>
     <div class="modal" id="searchuser">
 
         <div class="modal-dialog">

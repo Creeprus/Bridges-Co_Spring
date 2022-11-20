@@ -20,7 +20,7 @@
                         maxLength:100
                     },
 
-                    Country:{
+                    country:{
                         required:true,
                         minlength: 2,
                         maxLength:100
@@ -34,7 +34,7 @@
                         minlength: "Минимум 10 символов",
                         maxLength: "Максимум 100 символов"
                     },
-                    Country: {
+                    country: {
                         required: "Поле не должно быть пустым",
                         minlength: "Минимум 10 символов",
                         maxLength: "Максимум 100 символов"
@@ -45,17 +45,17 @@
             });
 
         });
-        $(function() {
+        $(function(id) {
 
-            $("#checkDataEdit").validate({
+            $("#checkDataEdit"+id).validate({
                 rules: {
-                    suppliername: {
+                    suppliername1: {
                         required: true,
                         minlength: 2,
                         maxLength:100
                     },
 
-                    Country:{
+                    country1:{
                         required:true,
                         minlength: 2,
                         maxLength:100
@@ -64,12 +64,12 @@
                     action: "required"
                 },
                 messages: {
-                    suppliername: {
+                    suppliername1: {
                         required: "Поле не должно быть пустым",
                         minlength: "Минимум 10 символов",
                         maxLength: "Максимум 100 символов"
                     },
-                    Country: {
+                    country1: {
                         required: "Поле не должно быть пустым",
                         minlength: "Минимум 10 символов",
                         maxLength: "Максимум 100 символов"
@@ -91,8 +91,6 @@
 <div class="col card-body justify-content-center align-items-center text-center">
     <a  class="btn btn-success "   data-toggle="modal" data-target="#searchsupplier" >Поиск</a>
     <a  class="btn btn-success "   data-toggle="modal" data-target="#addsupplier" >Добавить поставщика</a>
-<!--    <a  class="btn btn-success "  href="/Supplier/SortAsc" >Сортировка товаров по возрастанию</a>-->
-<!--    <a  class="btn btn-success "  href="/Supplier/SortDesc" >Сортировка товаров по убыванию</a>-->
     <a  class="btn btn-success "  href="/Storager/Index/"  >Обратно</a></div>
 <div class="modal" id="addsupplier">
 
@@ -110,7 +108,7 @@
 
                     <input th:field="*{supplier.suppliername}"  id="suppliername" type="text" placeholder="Поставщик" name="suppliername" ><br>
 
-                    <input th:field="*{supplier.country}" id="Country" type="text"  placeholder="Страна" name="country"><br>
+                    <input th:field="*{supplier.country}" id="country" type="text"  placeholder="Страна" name="country"><br>
 
 
                     <br>
@@ -153,46 +151,48 @@
 </div>
 
 <div class="card-body text-center card shadow-2-strong justify-content-center align-items-center">
-    <p th:text="${error}"></p>
-    <div class=" " >
-        <div class=" text-center" >
-            <div class="row justify-content-md-center">
-                <div class="col">
+
+    <p th:text="${errors}"></p>
+    <table class="table table-hover table-light">
+        <thead>
+        <tr>
+                <td >
                     Поставщик
                     <a href="/Storager/Supplier/SortAsc">↑</a>
                     <a href="/Storager/Supplier/SortDesc">↓</a>
-                </div>
-                <div class="col">
+                </td>
+                <td >
                     Страна
                     <a href="/Storager/Country/SortAsc">↑</a>
                     <a href="/Storager/Country/SortDesc">↓</a>
-                </div>
+                </td>
 
-                <div class="col ">
+                <td >
 
-                </div>
-                <div class="col ">
+                </td>
+                <td>
 
-                </div>
-            </div>
-        </div>
+                </td>
+        </tr>
+        </thead>
+        <tbody>
         <div class=" text-center " th:each="el: ${suppliers}">
 
-            <div class="row justify-content-md-center" >
-                <div class="col">
+          <tr>
+                <td>
                     <p th:text="${el.suppliername}"> </p>
-                </div>
-                <div class="col">
+                </td>
+                <td >
                     <p th:text="${el.country}"> </p>
-                </div>
+                </td>
 
-                <div class="col ">
+                <td >
                     <a  class="btn btn-success"   data-toggle="modal" th:data-target="${'#editsupplier'+el.id}" >Изменить поставщика</a>
-                </div>
-                <div class="col ">
+                </td>
+                <td >
                     <a  class="btn btn-danger"   data-toggle="modal" th:data-target="${'#deletesupplier'+el.id}" >Удалить</a>
-                </div>
-            </div>
+                </td>
+            </tr>
 
             <div class="modal" th:id="${'editsupplier'+el.id}">
 
@@ -206,15 +206,15 @@
                         <!-- Modal body -->
                         <div class="modal-body">
 
-                            <form method="post" th:action="'/Storager/Suppliers/Edit/'+${el.id}" id="checkDataEdit">
+                            <form method="post" th:action="'/Storager/Suppliers/Edit/'+${el.id}" th:id="checkDataEdit+${el.id}" th:onsubmit="function(${el.id})">
                                 <h5 class="">
                                     Поставщик
                                 </h5>
-                                <input type="text" id="suppliername" th:value="${el.suppliername}" name="suppliername"> </input>
+                                <input type="text" th:id="suppliername+${el.id}" th:value="${el.suppliername}" name="suppliername" minlength="3" maxlength="200" required> </input>
                                 <h5 class="">
                                     Страна
                                 </h5>
-                                <input type="text" id="Country" th:value="${el.country}" name="country"> </input>
+                                <input type="text" th:id="country+${el.id}" th:value="${el.country}" minlength="3" maxlength="200" required name="country"> </input>
 
                                 <br>
                                 <button type="submit" class="btn btn-danger"  >Изменить поставщика</button>
@@ -263,8 +263,9 @@
                 </div>
             </div>
             </div>
+        </tbody>
 
-    </div>
+   </table>
 </div>
 
 </body>

@@ -234,13 +234,13 @@ storage1.getSupplies().setSupplier(supplierRepository.findById(listSuppliers).or
 
         if(supplier.getSupplies().size()!=0)
         {
-            model.addAttribute("error","Нельзя удалить поставщика, учавствующего в поставках");
+            model.addAttribute("errors","Нельзя удалить поставщика, учавствующего в поставках");
             model.addAttribute("suppliers",supplierRepository.findAll());
             return "/Storager/Suppliers/View";
         }
          supplierRepository.delete(supplier);
         model.addAttribute("suppliers",supplierRepository.findAll());
-        return "/Storager/Suppliers/View";
+        return "redirect:/Storager/Suppliers/View";
     }
     @GetMapping("/Suppliers/Search")
     public String SuppliersSearch( Supplier supplier,@RequestParam(name="search_name") String name,

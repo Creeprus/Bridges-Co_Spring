@@ -64,7 +64,7 @@
   <script>
     $(function() {
 
-      $("#checkDataAdd").validate({
+      $("#pathcheck").validate({
         rules: {
           transport: {
             required: true,
@@ -72,9 +72,10 @@
             maxLength:200
           },
           path_time:{
-
+            min:"00:15",
+              required:true
           },
-          path_cost:{
+          pathcost:{
             required:true,
             min:0.00
           },
@@ -87,9 +88,10 @@
             maxLength: "Максимум 200 символов",
           },
           path_time:{
-
+            min:"Минимум 15 минут",
+              required:"Поле не должно быть пустым"
           },
-          path_cost:{
+          pathcost:{
             required: "Поле обязательно",
             min: "Минимальная стоимость не может быть меньше 0",
           },
@@ -97,6 +99,7 @@
         }
       });
     });
+
   </script>
 </head>
 <body style="background: linear-gradient(to right, #ee7724, #c0fa0d, #bedd36, #b44593)">
@@ -168,24 +171,26 @@
                 </div>
                 <!-- Modal body -->
                 <div class="modal-body">
-                  <form method="post" th:action="'/Logist/Pathing/Edit/'+${el.id}" id="checkDataAdd">
+                  <form method="post" th:action="'/Logist/Pathing/Edit/'+${el.id}"  id="pathcheck">
 
                     <div class="form-control">
                       <h3>Адресс доставки</h3>
 
                     </div>
                     <p th:text="${el.pathing.adress}" > </p>
+
                     <div class="form-control">
                       <h3>Предполагаемый транспорт для передвижения</h3>
 
                     </div>
-                    <input type="text" th:value="${el.pathing.transport}" name="transport" id="transport"> </input>
+                    <input type="text" th:value="${el.pathing.transport}" name="transport" th:id="transport+${el.id}" minlength="3" maxlength="200" required> </input>
+
                     <div class="form-control">
                       <h3>Предполагаемое время в пути</h3>
 
                     </div>
-                    <input type="time" th:value="${el.pathing.path_time}" name="path_time" id="path_time" min="00:15"> </input>
-                    <small>Минимум 15 минут</small>
+                    <input type="time" th:value="${el.pathing.path_time}" name="path_time" th:id="path_time+${el.id}" min="00:15" required> </input>
+<!--                    <small>Минимум 15 минут</small>-->
                     <div class="form-control">
                       <h3>Предполагаемая стоимость пути</h3>
 

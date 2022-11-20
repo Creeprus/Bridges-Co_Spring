@@ -96,52 +96,34 @@
     </div>
 </div>
 
-<div class="card-body text-center card shadow-2-strong justify-content-center align-items-center">
-    <div class="form-horizontal card-body" >
-        <div class="container text-center" >
-            <div class="row">
-                <div class="col">
-                    Наименование товара
-                    <a href="/Storager/Shipment/SortAsc">↑</a>
-                    <a href="/Storager/Shipment/SortDesc">↓</a>
-                </div>
-                <div class="col">
-                    Дата поставки
-                    <a href="/Storager/Date/SortAsc">↑</a>
-                    <a href="/Storager/Date/SortDesc">↓</a>
-                </div>
-                <div class="col">
-                    Количество
-                    <a href="/Storager/Amount/SortAsc">↑</a>
-                    <a href="/Storager/Amount/SortDesc">↓</a>
-                </div>
-                <div class="col">
-
-                </div>
-                <div class="col">
-
-                </div>
-            </div>
-        </div>
-        <div class="container text-center" th:each="el: ${storage}">
-            <div class="row">
-                <div class="col">
-                    <p th:text="${el.shipments.shipmentname}"> </p>
-                </div>
-                <div class="col">
-                    <p th:text="${el.supplies.dateofsupply}"> </p>
-                </div>
-                <div class="col">
-                    <p th:text="${el.amount}">
-                </div>
-                <div class="col">
-                    <a  class="btn btn-success"   data-toggle="modal" th:data-target="${'#editshipment'+el.id}" >Изменить товар</a>
-                </div>
-                <div class="col">
-                    <a  class="btn btn-info"   data-toggle="modal" th:data-target="${'#detailshipment'+el.id}" >Подробней</a>
-                </div>
-            </div>
-
+<table class="table table-hover table-light">
+    <thead>
+    <tr>
+        <th>Наименование товара
+            <a href="/Storager/Shipment/SortAsc">↑</a>
+            <a href="/Storager/Shipment/SortDesc">↓</a></th>
+        <th> Дата поставки
+            <a href="/Storager/Date/SortAsc">↑</a>
+            <a href="/Storager/Date/SortDesc">↓</a></th>
+        <th>  Количество
+            <a href="/Storager/Amount/SortAsc">↑</a>
+            <a href="/Storager/Amount/SortDesc">↓</a></th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <div class="container text-center" th:each="el: ${storage}">
+        <tr >
+            <td> <p th:text="${el.shipments.shipmentname}"> </p></td>
+            <td> <p th:text="${el.supplies.dateofsupply}"> </p></td>
+            <td> <p th:text="${el.amount}"></td>
+            <td>
+                <a  class="btn btn-success"   data-toggle="modal" th:data-target="${'#editshipment'+el.id}" >Изменить товар</a>
+            </td>
+            <td>
+                <a  class="btn btn-info"   data-toggle="modal" th:data-target="${'#detailshipment'+el.id}" >Подробней</a>
+            </td>
             <div class="modal" th:id="${'editshipment'+el.id}">
 
                 <div class="modal-dialog">
@@ -170,7 +152,7 @@
                                 <h5 class="">
                                     Количество товара
                                 </h5>
-                                <input th:value="*{el.amount}"  id="amount" type="number" placeholder="Количество товара" name="amount"><br>
+                                <input th:value="*{el.amount}" min="0" oninput="this.value = Math.abs(this.value); "  id="amount" type="number" placeholder="Количество товара" name="amount"><br>
                                 <h5 class="">
                                     Поставщик
                                 </h5>
@@ -204,36 +186,36 @@
                         <div class="modal-body">
 
 
-                                <h5 class="">
-                                    Наименование товара
-                                </h5>
-                                <p th:text="${el.shipments.shipmentname}"> </p>
-                                <h5 class="">
-                                    Стоимость
-                                </h5>
-                                <p th:text="${el.shipments.Cost}"> </p>
-                                <h5 class="">
-                                    Срок годности (до)
-                                </h5>
-                                <p th:text="${el.shipments.expirationdate}"> </p>
-                                <h5 class="">
-                                    Количество товара
-                                </h5>
-                                <p th:text="${el.amount}"> </p>
-                                <h5 class="">
-                                    Поставщик
-                                </h5>
-                                <p th:text="${el.supplies.supplier.suppliername}"> </p>
-                                <br>
-                                <h5 class="">
-                                    Дата поставки
-                                </h5>
-                                <p th:text="${el.supplies.dateofsupply}"> </p>
-                                <br>
+                            <h5 class="">
+                                Наименование товара
+                            </h5>
+                            <p th:text="${el.shipments.shipmentname}"> </p>
+                            <h5 class="">
+                                Стоимость
+                            </h5>
+                            <p th:text="${el.shipments.Cost}"> </p>
+                            <h5 class="">
+                                Срок годности (до)
+                            </h5>
+                            <p th:text="${el.shipments.expirationdate}"> </p>
+                            <h5 class="">
+                                Количество товара
+                            </h5>
+                            <p th:text="${el.amount}"> </p>
+                            <h5 class="">
+                                Поставщик
+                            </h5>
+                            <p th:text="${el.supplies.supplier.suppliername}"> </p>
+                            <br>
+                            <h5 class="">
+                                Дата поставки
+                            </h5>
+                            <p th:text="${el.supplies.dateofsupply}"> </p>
+                            <br>
 
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
-                                </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                            </div>
 
                         </div>
 
@@ -241,10 +223,10 @@
 
                 </div>
             </div>
-        </div>
-
+        </tr>
     </div>
-</div>
+    </tbody>
+</table>
 
 </body>
 
