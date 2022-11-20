@@ -114,9 +114,10 @@
 
                     <input th:field="*{shipment.shipmentname}"  id="shipmentname" type="text" placeholder="Наименование товара" name="shipmentname" ><br>
 
-                    <input th:field="*{shipment.Cost}" id="Cost" type="number" step="0.01" placeholder="Цена товара" name="Cost"><br>
+                    <input th:field="*{shipment.Cost}" id="Cost" type="number" step="0.01" placeholder="Цена товара" oninput="this.value = Math.abs(this.value)" name="Cost"><br>
                     <h3>Срок годности</h3>
                     <input th:field="*{shipment.expirationdate}" id="expirationdate"  type="date"  placeholder="Срок годности" name="expirationdate"><br>
+                    <h3>Количество товара</h3>
                     <input th:field="*{storages.amount}" id="amount" type="number"  placeholder="Количество товара" oninput="this.value = Math.abs(this.value)" name="amount"><br>
                     <h3>Поставщик</h3>
                     <select name="listSuppliers">

@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import net.minidev.json.annotate.JsonIgnore;
 
+import javax.annotation.RegEx;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -15,13 +17,16 @@ public class Account {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
     @NotNull
     @NotEmpty(message="Поле не должно быть пустым")
-    @Size(min=3,max=30,message="Поле должно содержать не менее 3х и не более 30 символов")
+    @Pattern(regexp = "^[a-zA-Z0-9]{3,30}$",
+            message = "Логин должен быть не более 30 и не менее 3 символов")
     private String username;
     @NotNull
     @NotEmpty(message="Поле не должно быть пустым")
-    @Size(min=3,max=200,message="Поле должно содержать не менее 3х и не более 30 символов")
+
+
     private String password;
 
     @JsonIgnore

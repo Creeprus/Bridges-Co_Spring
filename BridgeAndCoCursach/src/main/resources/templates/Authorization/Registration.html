@@ -40,7 +40,7 @@
                placeholder="Введите пароль" name="password"/>
 
     </div>
-        <div th:object="${account}" th:if="${#fields.hasErrors()}" th:errors="*{password}" style="color:red"></div><br>
+        <div th:object="${account}" th:if="${#fields.hasErrors()}" th:errors="*{password}"  style="color:red"></div><br>
     <div class="form-outline mb-4">
         <label class="form-label" for="form3Example5">Почта</label>
         <input type="text" id="form3Example5" class="form-control form-control-lg"

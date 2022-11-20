@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Bridges&CO</title>
+
 </head>
 <body style="background: linear-gradient(to right, #ee7724, #c0fa0d, #bedd36, #b44593)">
 <div th:insert="Header/header :: headerAdmin"></div>
 <div class="card-body text-center card shadow-2-strong justify-content-center align-items-center">
-    <h1>Добро пожаловать</h1>
+    <h1>Добро пожаловать, </h1>    <h1 th:text="${currentaccount.user.surname} + ' '+ ${currentaccount.user.name} + ' '+ ${currentaccount.user.patronymic}"> </h1>
 
 </div>
 <div class="card-body text-center card shadow-2-strong justify-content-center align-items-center">
@@ -38,6 +39,100 @@
 <!--            <button class="figure-img img-fluid rounded" type="submit"><h1>Бэкап базы данных</h1></button>-->
 <!--        </figure>-->
 <!--    </form>-->
+<!--    <form method="get" th:action="'/Account/Info'">-->
+        <figure class="figure">
+            <button class="figure-img img-fluid rounded" data-toggle="modal" th:data-target="${'#accountdetail'+currentaccount.id}"><h1>Информация о вашем аккаунте</h1></button>
+        </figure>
+<!--    </form>-->
+<!--    <form method="get" th:action="'/Account/Update'">-->
+        <figure class="figure">
+            <button class="figure-img img-fluid rounded" data-toggle="modal" th:data-target="${'#accountedit'+currentaccount.id}"><h1>Поменять пароль</h1></button>
+        </figure>
+
+    <div class="modal" th:id="${'accountdetail'+currentaccount.id}">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Ваш аккаунт</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+
+
+                    <div class="form-control">
+                        <h3>Логин</h3>
+
+                    </div>
+                    <p th:text="${currentaccount.username}"> </p>
+                    <div class="form-control">
+                        <h3>Ваша почта</h3>
+
+                    </div>
+                    <p th:text="${currentaccount.user.email}"> </p>
+                    <div class="form-control">
+                        <h3>Ваш телефон</h3>
+
+                    </div>
+                    <p th:text="${currentaccount.user.phoneNumber}"> </p>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="modal" th:id="${'accountedit'+currentaccount.id}">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Ваш аккаунт</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+
+<form method="post" th:action="'/Admin/AccountUpdate'+${currentaccount.id}">
+                    <div class="form-control">
+                        <h3>Логин</h3>
+
+                    </div>
+                    <p th:text="${currentaccount.username}" > </p>
+    <div class="form-control">
+        <h3>Пароль</h3>
+
+    </div>
+    Если не желаете менять пароль, оставьте пустым
+    <input type="password"  minlength="3" maxlength="200" pattern="^(?=.*[a-z])(?=.*[A-Z]).{3,50}$" name="account.password"> </input>
+                    <div class="form-control">
+                        <h3>Ваша почта</h3>
+
+                    </div>
+                    <input type="email" th:value="${currentaccount.user.email}" name="email"> </input>
+                    <div class="form-control">
+                        <h3>Ваш телефон</h3>
+
+                    </div>
+                    <input type="text" th:value="${currentaccount.user.phoneNumber}"  pattern="^($|[0-9]{11})" name="phoneNumber"> </input>
+    <button type="submit" class="btn btn-danger" >Изменить данные об аккаунте</button>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger"  data-dismiss="modal">Закрыть</button>
+                    </div>
+</form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </div>
 </body>
 </html>

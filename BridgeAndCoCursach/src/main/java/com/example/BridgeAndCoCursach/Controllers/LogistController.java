@@ -1,6 +1,7 @@
 package com.example.BridgeAndCoCursach.Controllers;
 
 import com.example.BridgeAndCoCursach.Models.*;
+import com.example.BridgeAndCoCursach.Repository.AccountRepository;
 import com.example.BridgeAndCoCursach.Repository.OrderRepository;
 import com.example.BridgeAndCoCursach.Repository.PathingRepository;
 import com.example.BridgeAndCoCursach.Repository.UserRepository;
@@ -8,12 +9,18 @@ import com.example.BridgeAndCoCursach.Service.OrderShipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,9 +39,50 @@ public class LogistController {
     OrderRepository orderRepository;
     @Autowired
     OrderShipmentService orderShipmentService;
+    @Autowired
+    AccountRepository accountRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    public static HttpSession session() {
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        return attr.getRequest().getSession(true); // true == allow create
+    }
+    public String UserSession() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String name = auth.getName();
+
+
+        // modelMap.addAttribute("username", name);
+        return name;
+    }
+    @PostMapping("/AccountUpdate{id}")
+    public String updateAccount(@PathVariable(name="id")Long id,User useredit,Model model)
+    {
+        User user=userRepository.findFirstByAccount(accountRepository.findById(id).orElseThrow());
+
+        if(useredit.getAccount().getPassword()!="")
+        {
+            user.getAccount().setPassword(passwordEncoder.encode(useredit.getAccount().getPassword()));
+        }
+
+
+        user.setPhoneNumber(useredit.getPhoneNumber());
+        user.setEmail(useredit.getEmail());
+
+
+        userRepository.save(user);
+//        accountRepository.save(account);
+
+
+        Account  account=accountRepository.findAccountByUsername(UserSession());
+        model.addAttribute("currentaccount",account);
+        return "redirect:/Logist/Index";
+    }
     @GetMapping("/Index")
     public String regView(Account user, Model model)
     {
+        user=accountRepository.findAccountByUsername(UserSession());
+        model.addAttribute("currentaccount",user);
         return "/Logist/Index";
     }
 

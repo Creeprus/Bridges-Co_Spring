@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @PreAuthorize("hasAnyAuthority('Администратор')")
 @Controller
@@ -50,10 +53,14 @@ public class AdminController {
     ShipmentRepository shipmentRepository;
     @Autowired
     SupplierRepository supplierRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 @GetMapping("/Index")
 public String regView(Account user, Model model)
 {
+    user=accountRepository.findAccountByUsername(UserSession());
+    model.addAttribute("currentaccount",user);
     return "/Admin/Index";
 }
     @GetMapping("/Account/Filter/{search_name}")
@@ -250,6 +257,29 @@ public String userEditView(@PathVariable(name="id") Long id,
     @GetMapping ("/backup")
     public String backup(DBManaging.DatabaseUtilBackup dbManaging) throws IOException, InterruptedException {
         DBManaging.DatabaseUtilBackup.backup();
+        return "redirect:/Admin/Index";
+    }
+    @PostMapping("/AccountUpdate{id}")
+    public String updateAccount(@PathVariable(name="id")Long id,User useredit,Model model)
+    {
+        User user=userRepository.findFirstByAccount(accountRepository.findById(id).orElseThrow());
+
+       if(useredit.getAccount().getPassword()!="")
+       {
+           user.getAccount().setPassword(passwordEncoder.encode(useredit.getAccount().getPassword()));
+       }
+
+
+       user.setPhoneNumber(useredit.getPhoneNumber());
+       user.setEmail(useredit.getEmail());
+
+
+        userRepository.save(user);
+//        accountRepository.save(account);
+
+
+     Account  account=accountRepository.findAccountByUsername(UserSession());
+        model.addAttribute("currentaccount",account);
         return "redirect:/Admin/Index";
     }
 

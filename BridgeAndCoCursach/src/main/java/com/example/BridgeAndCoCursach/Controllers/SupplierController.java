@@ -1,26 +1,24 @@
 package com.example.BridgeAndCoCursach.Controllers;
 
-import com.example.BridgeAndCoCursach.Models.Shipment;
-import com.example.BridgeAndCoCursach.Models.Storage;
-import com.example.BridgeAndCoCursach.Models.Supply;
-import com.example.BridgeAndCoCursach.Repository.ShipmentRepository;
-import com.example.BridgeAndCoCursach.Repository.StorageRepository;
-import com.example.BridgeAndCoCursach.Repository.SupplierRepository;
-import com.example.BridgeAndCoCursach.Repository.SupplyRepository;
+import com.example.BridgeAndCoCursach.Models.*;
+import com.example.BridgeAndCoCursach.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,10 +39,30 @@ public class SupplierController {
     StorageRepository storageRepository;
     @Autowired
     SupplierRepository supplierRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    AccountRepository accountRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+    public static HttpSession session() {
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        return attr.getRequest().getSession(true); // true == allow create
+    }
+    public String UserSession() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String name = auth.getName();
+
+
+        // modelMap.addAttribute("username", name);
+        return name;
+    }
 
     @GetMapping("/Index")
-    public String SupplierIndex()
+    public String SupplierIndex(Model model)
     {
+     Account   user=accountRepository.findAccountByUsername(UserSession());
+        model.addAttribute("currentaccount",user);
         return "/Supplier/Index";
     }
 
@@ -149,7 +167,7 @@ public class SupplierController {
         model.addAttribute("storages",storage);
         model.addAttribute("shipment",shipment);
         model.addAttribute("storage",storageRepository.findAll());
-        return "/Supplier/View";
+        return "redirect:/Supplier/View";
     }
     @GetMapping("/Search")
     public String SupplierSearch( @RequestParam(name="search_name") String name,Storage storages, Shipment shipment, Supply supplies,Model model)
@@ -229,5 +247,28 @@ public class SupplierController {
         model.addAttribute("shipment",shipment);
 
         return "/Supplier/View";
+    }
+    @PostMapping("/AccountUpdate{id}")
+    public String updateAccount(@PathVariable(name="id")Long id, User useredit, Model model)
+    {
+        User user=userRepository.findFirstByAccount(accountRepository.findById(id).orElseThrow());
+
+        if(useredit.getAccount().getPassword()!="")
+        {
+            user.getAccount().setPassword(passwordEncoder.encode(useredit.getAccount().getPassword()));
+        }
+
+
+        user.setPhoneNumber(useredit.getPhoneNumber());
+        user.setEmail(useredit.getEmail());
+
+
+        userRepository.save(user);
+//        accountRepository.save(account);
+
+
+        Account account=accountRepository.findAccountByUsername(UserSession());
+        model.addAttribute("currentaccount",account);
+        return "redirect:/Supplier/Index";
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,8 @@ public class CourierController {
     StorageRepository storageRepository;
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
     public static HttpSession session() {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         return attr.getRequest().getSession(true); // true == allow create
@@ -49,6 +52,8 @@ public class CourierController {
     @GetMapping("/Orders")
     public String OrderView(Account account , OrderShipment orderShipment, Pathing pathing, Model model)
     {
+   Account     curuser=accountRepository.findAccountByUsername(UserSession());
+        model.addAttribute("currentaccount",curuser);
         String currentuser=UserSession();
         account=accountRepository.findAccountByUsername(currentuser);
         User user=userRepository.findFirstByAccount(account);;
@@ -71,6 +76,31 @@ public class CourierController {
         List<OrderShipment> orders= (List<OrderShipment>) orderRepository.findAll();
         orders.removeIf(order -> !order.getUsers().contains(user));
         model.addAttribute("order",orders);
-        return "/Courier/Orders";
+        Account curuser=accountRepository.findAccountByUsername(UserSession());
+        model.addAttribute("currentaccount",curuser);
+        return "redirect:/Courier/Orders";
+    }
+    @PostMapping("/AccountUpdate{id}")
+    public String updateAccount(@PathVariable(name="id")Long id,User useredit,Model model)
+    {
+        User user=userRepository.findFirstByAccount(accountRepository.findById(id).orElseThrow());
+
+        if(useredit.getAccount().getPassword()!="")
+        {
+            user.getAccount().setPassword(passwordEncoder.encode(useredit.getAccount().getPassword()));
+        }
+
+
+        user.setPhoneNumber(useredit.getPhoneNumber());
+        user.setEmail(useredit.getEmail());
+
+
+        userRepository.save(user);
+//        accountRepository.save(account);
+
+
+        Account  account=accountRepository.findAccountByUsername(UserSession());
+        model.addAttribute("currentaccount",account);
+        return "redirect:/Courier/Orders";
     }
 }
