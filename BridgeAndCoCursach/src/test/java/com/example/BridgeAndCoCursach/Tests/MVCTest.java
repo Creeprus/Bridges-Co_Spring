@@ -329,7 +329,14 @@ OrderShipment order=orderRepository.findById(145L).orElseThrow();
                 new Account("","",true,user.getAccount().getRole(),null)
                 ,user.getOrders());
         newdata.setId(user.getId());
-        userRepository.save(newdata);
+        try
+            {
+
+                userRepository.save(newdata);
+            }catch(Exception e)
+            {
+                fail("Validation failed");
+            }
         assertThat(newdata).hasFieldOrPropertyWithValue("id", user.getId());
     }
     @Test
