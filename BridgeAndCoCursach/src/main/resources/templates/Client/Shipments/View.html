@@ -69,7 +69,7 @@
             var theProduct=parseFloat(theProduct);
 
              theProduct = parseFloat(numOne) * parseFloat(numTwo);
-            theProduct =  theProduct.toPrecision(4);
+            theProduct =  theProduct.toPrecision(10);
             console.log(numOne); console.log(numTwo);
             console.log(theProduct);
             document.getElementById('total'+id).innerText=theProduct.toString();
@@ -230,7 +230,7 @@
                                 На адресс:
                             </h5>
 
-                            <input  th:field="${pathing.adress}" id="adress" type="text" placeholder="Ваш адресс" name="adress" required><br>
+                            <input  th:field="${pathing.adress}" id="adress" type="text" placeholder="Ваш адресс" name="adress" minlength="10" maxlength="200" required><br>
                             <h5 class="">
                                 В количестве:
                             </h5>

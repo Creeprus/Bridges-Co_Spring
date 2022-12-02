@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ShipmentService {
     MessageResponse createEmployee(Shipment shipmentRequest);
     Optional<Shipment> updateEmployee(Long shipmentId, Shipment shipmentRequest);
-    void deleteEmployee(Long shipmentId);
+
     Shipment getASingleEmployee(Long shipmentId);
     List<Shipment> getAllEmployee();
 }

@@ -22,5 +22,10 @@ public class UserService {
 
        return (List<User>) repo.findAll();
    }
+    public User FindOne(Long id)
+    {
+
+        return repo.findById(id).orElseThrow();
+    }
 
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Component
 public interface StorageService {
-    MessageResponse createStorage(Storage storageRequest);
+    Storage createStorage(Storage storageRequest);
     Optional<Storage> updateStorage(Long shipmentId, Storage storageRequestRequest);
     void deleteStorage(Long storageRequestId);
     Storage getASingleStorage(Long storageRequestId);

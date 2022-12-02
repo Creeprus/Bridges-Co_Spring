@@ -6,6 +6,9 @@ import com.example.BridgeAndCoCursach.Models.User;
 import com.example.BridgeAndCoCursach.Repository.AccountRepository;
 import com.example.BridgeAndCoCursach.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +18,10 @@ import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.regex.Matcher;
@@ -23,7 +29,7 @@ import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/Authorization")
-public class RegistrationController {
+public class RegistrationController  {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -31,6 +37,18 @@ public class RegistrationController {
     @Autowired
     UserRepository userRepository;
 
+    public static HttpSession session() {
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        return attr.getRequest().getSession(true); // true == allow create
+    }
+    public String UserSession() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String name = auth.getName();
+
+
+        // modelMap.addAttribute("username", name);
+        return name;
+    }
     @GetMapping("/Registration")
     public String regView(Account account, User user, Model model)
     {
@@ -87,7 +105,7 @@ public class RegistrationController {
             user.setAccount(account);
 
             userRepository.save(user);
-//        accountRepository.save(account);
+
 
 
         return "redirect:/Login";

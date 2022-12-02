@@ -3,6 +3,7 @@ package com.example.BridgeAndCoCursach.Service;
 import com.example.BridgeAndCoCursach.APIRepository.StorageAPIRepository;
 import com.example.BridgeAndCoCursach.Models.Shipment;
 import com.example.BridgeAndCoCursach.Models.Storage;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,14 @@ public class StorageServiceImp implements StorageService{
     @Autowired
     StorageAPIRepository storageAPIRepository;
     @Override
-    public MessageResponse createStorage(Storage storageRequest) {
+    public Storage createStorage(Storage storageRequest) {
         Storage storage=new Storage();
         storage.setAmount(storageRequest.getAmount());
         storage.setShipments(storageRequest.getShipments());
         storage.setSupplies(storageRequest.getSupplies());
-
+        BeanUtils.copyProperties(storageRequest,storage);
         storageAPIRepository.save(storage);
-        return new MessageResponse("Товар был создан");
+        return storage;
     }
 
     @Override

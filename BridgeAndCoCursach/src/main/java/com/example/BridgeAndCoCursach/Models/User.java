@@ -50,6 +50,13 @@ public class User {
     public User() {
     }
 
+    public User(String name, String surname, String patronymic, String email, @Nullable String phoneNumber) {
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        Email = email;
+        PhoneNumber = phoneNumber;
+    }
 
     public User(String name, String surname, String patronymic, String email, String phoneNumber, Account account, List<OrderShipment> orders) {
         this.name = name;

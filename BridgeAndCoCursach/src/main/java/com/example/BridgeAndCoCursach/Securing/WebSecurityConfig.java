@@ -38,14 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new Sha512PasswordEncoder();
     }
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-//        UserDetails user = User.withUsername("user")
-//
-//                .build();
-//        return new InMemoryUserDetailsManager(user);
-//    }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -70,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin(formLogin -> formLogin
                         .successHandler(new AuthentificationSuccess())
                 )
-                .sessionManagement().maximumSessions(1).and()
+                .sessionManagement().maximumSessions(4).and()
                 .and()
                 .logout().invalidateHttpSession(true).permitAll()
                 .and()

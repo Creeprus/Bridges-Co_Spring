@@ -35,8 +35,8 @@ public class APIStorageController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<MessageResponse> addShipment(@RequestBody Storage  employee) {
-        MessageResponse newEmployee = storageService.createStorage(employee);
+    public ResponseEntity<Storage> addShipment(@RequestBody Storage  employee) {
+        Storage newEmployee = storageService.createStorage(employee);
         return new ResponseEntity<>(newEmployee, HttpStatus.CREATED);
     }
     @DeleteMapping("{id}")

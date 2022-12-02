@@ -36,19 +36,22 @@ private final AccountAPIRepository repository;
         return repository.findById(id)
                 .orElseThrow();
     }
-    @PutMapping("{id}")
-    public ResponseEntity<Account> updateAccount(@PathVariable("id") long id, @RequestBody Account account) {
-        Optional<Account> tutorialData = repository.findById(id);
 
-        if (tutorialData.isPresent()) {
-            Account _account = tutorialData.get();
-            _account.setUsername(account.getUsername());
-            _account.setPassword(passwordEncoder.encode(account.getPassword()));
-            _account.setRole(account.getRole());
-            return new ResponseEntity<>(repository.save(_account), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @PutMapping("/{id}")
+    Account replaceEmployee(@RequestBody Account newEmployee, @PathVariable Long id) {
+
+        return repository.findById(id)
+                .map(employee -> {
+                    employee.setPassword(passwordEncoder.encode(newEmployee.getPassword()));
+                    employee.setRole(newEmployee.getRole());
+                    employee.setUsername(newEmployee.getUsername());
+                    employee.setActive(newEmployee.getActive());
+                    return repository.save(employee);
+                })
+                .orElseGet(() -> {
+                    newEmployee.setId(id);
+                    return repository.save(newEmployee);
+                });
     }
 }
 

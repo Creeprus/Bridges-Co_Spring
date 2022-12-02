@@ -58,22 +58,4 @@ public class APISupplyController {
         }
     }
 
-    @Transactional
-    @PostMapping("add")
-    public ResponseEntity<Supply> create(@RequestBody Supply supply) {
-        try {
-                Supplier supplier=supplierAPIRepository.findSupplierById(supply.getSupplier().getId());
-                Supply _supply = repository
-                        .save(new Supply(supply.getDateofsupply(),supplier,supply.getStorages()));
-
-                return new ResponseEntity<>(_supply, HttpStatus.CREATED);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    @DeleteMapping("{id}")
-    void delete(@PathVariable Long id) {
-        repository.deleteById(id);
-    }
 }

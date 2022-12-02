@@ -34,13 +34,5 @@ public class APIShipmentController {
         return new ResponseEntity<>(updateEmployee, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<MessageResponse> addShipment(@RequestBody Shipment employee) {
-        MessageResponse newEmployee = shipmentService.createEmployee(employee);
-        return new ResponseEntity<>(newEmployee, HttpStatus.CREATED);
-    }
-    @DeleteMapping("{id}")
-    void delete(@PathVariable Long id) {
-        shipmentService.deleteEmployee(id);
-    }
+
 }

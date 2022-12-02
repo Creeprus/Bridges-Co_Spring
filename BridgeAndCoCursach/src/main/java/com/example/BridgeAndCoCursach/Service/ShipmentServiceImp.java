@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ShipmentServiceIMp implements ShipmentService{
+public class ShipmentServiceImp implements ShipmentService{
 
     @Autowired
     ShipmentAPIRepository shipmentAPIRepository;
@@ -41,15 +41,7 @@ public class ShipmentServiceIMp implements ShipmentService{
         }
     }
 
-    @Override
-    public void deleteEmployee(Long shipmentId) {
 
-            shipmentAPIRepository.deleteById(shipmentId);
-
-
-
-
-    }
 
     @Override
     public Shipment getASingleEmployee(Long shipmentId) {

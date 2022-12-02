@@ -34,18 +34,10 @@
     </form>
 
 
-<!--    <form method="get" th:action="'/Admin/backup'">-->
-<!--        <figure class="figure">-->
-<!--            <button class="figure-img img-fluid rounded" type="submit"><h1>Бэкап базы данных</h1></button>-->
-<!--        </figure>-->
-<!--    </form>-->
-<!--    <form method="get" th:action="'/Account/Info'">-->
-        <figure class="figure">
+       <figure class="figure">
             <button class="figure-img img-fluid rounded" data-toggle="modal" th:data-target="${'#accountdetail'+currentaccount.id}"><h1>Информация о вашем аккаунте</h1></button>
         </figure>
-<!--    </form>-->
-<!--    <form method="get" th:action="'/Account/Update'">-->
-        <figure class="figure">
+       <figure class="figure">
             <button class="figure-img img-fluid rounded" data-toggle="modal" th:data-target="${'#accountedit'+currentaccount.id}"><h1>Поменять пароль</h1></button>
         </figure>
 

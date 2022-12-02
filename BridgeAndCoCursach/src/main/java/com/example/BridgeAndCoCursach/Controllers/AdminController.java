@@ -118,13 +118,7 @@ public String regView(Account user, Model model)
         model.addAttribute("listUser",accountRepository.findAll());
         return "/Admin/Account/View";
     }
-//    @GetMapping("/Account/{id}")
-//    public String PutView(Account user,@PathVariable(name="id") Long id, Model model)
-//    {
-//
-//        model.addAttribute("userOne",accountRepository.findById(id));
-//        return "/Admin/Account/View";
-//    }
+
 @PostMapping("/AccountEdit/{id}")
 public String userEditView(@PathVariable(name="id") Long id,
 
@@ -219,36 +213,28 @@ public String userEditView(@PathVariable(name="id") Long id,
     @GetMapping ("/exportsuppliers")
     public void exportSuppliers(HttpServletResponse response) throws IOException
     {
+
         response.setContentType("text/csv");
         String filename="suppliers.csv";
         String headerKey="Content-Disposition";
         String headerValue="attachment; filename="+filename;
 
         response.setHeader(headerKey,headerValue);
-
         List<Supplier> suppliers= (List<Supplier>) supplierRepository.findAll();
-
-
-
-        // closing writer connection
-
         Locale locale=new Locale("ru","RU");
         response.setLocale(locale);
         response.setCharacterEncoding("UTF-8");
         ICsvBeanWriter csvBeanWriter=new CsvBeanWriter(response.getWriter(), CsvPreference.EXCEL_PREFERENCE);
 
         String[] csvHeader={"id Поставщика","Наименование поставщика","Страна"};
-        // String[] csvHeader_acc={"Логин"};
         String[] nameMappingus={"id","suppliername","Country"};
 
-        // String[] nameMappingac={"username"};
         csvBeanWriter.writeHeader(csvHeader);
-        // csvBeanWriter.writeHeader(csvHeader_acc);
+
         for (Supplier supplier:suppliers)
         {
             csvBeanWriter.write(supplier,nameMappingus);
 
-            // csvBeanWriter.write(user.getAccount(),nameMappingac);
         }
 
 
@@ -275,7 +261,6 @@ public String userEditView(@PathVariable(name="id") Long id,
 
 
         userRepository.save(user);
-//        accountRepository.save(account);
 
 
      Account  account=accountRepository.findAccountByUsername(UserSession());

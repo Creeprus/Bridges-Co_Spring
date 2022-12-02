@@ -29,8 +29,8 @@ public class APISupplierController {
         return repository.findById(id)
                 .orElseThrow();
     }
-    @PutMapping("{id}")
-    public ResponseEntity<Supplier> update(@PathVariable("id") long id, @RequestBody Supplier supplier) {
+    @PutMapping("/{id}")
+Supplier update(@PathVariable("id") long id, @RequestBody Supplier supplier) {
         Optional<Supplier> tutorialData = repository.findById(id);
 
         if (tutorialData.isPresent()) {
@@ -38,22 +38,22 @@ public class APISupplierController {
             _supplier.setSuppliername(supplier.getSuppliername());
             _supplier.setCountry(supplier.getCountry());
 
-            return new ResponseEntity<>(repository.save(_supplier), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return repository.save(_supplier);
         }
+        return supplier;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Supplier> create(@RequestBody Supplier supplier) {
+    Supplier create(@RequestBody Supplier supplier) {
         try {
 
             Supplier _supplier = repository
                     .save(supplier);
-            return new ResponseEntity<>(_supplier, HttpStatus.CREATED);
+            return _supplier;
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
+        return supplier;
     }
     @DeleteMapping("{id}")
     void delete(@PathVariable Long id) {
