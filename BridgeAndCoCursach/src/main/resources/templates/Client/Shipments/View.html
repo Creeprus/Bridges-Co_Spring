@@ -130,9 +130,12 @@
     </script>
 </head>
 <body style="background: linear-gradient(to right, #ee7724, #c0fa0d, #bedd36, #b44593)">
+
 <div th:insert="Header/header :: headerClient"></div>
+
 <div class="row mb-5 text-center" >
-    <a  class="btn btn-success "   data-toggle="modal" data-target="#searchuser" >Поиск</a>
+    <a  class="btn btn-success "  href="/Client/Index/"  >Обратно</a>
+    <a  class="btn btn-warning"   data-toggle="modal" data-target="#searchuser" >Поиск</a>
     <div class="col-5 themed-grid-col card shadow-3-strong container" th:each="el: ${storage}">
 
         <div class="form-control">

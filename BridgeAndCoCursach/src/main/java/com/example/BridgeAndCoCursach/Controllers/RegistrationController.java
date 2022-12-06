@@ -84,6 +84,13 @@ public class RegistrationController  {
             {
                 bindingResultAcc.rejectValue("password","123","Пароль должен содержать одну заглавную, одну незаглавную английскую букву. Пароль от 3 до 50 символов ");
             }
+            if(user.getPhoneNumber()!="" && bindingResultUs.hasErrors()) {
+                bindingResultUs.rejectValue("phoneNumber", "124", "Телефон должен быть введён в формате этого примера: 80125440293");
+            }
+            if(user.getEmail()!="" && bindingResultUs.hasErrors()) {
+                bindingResultUs.rejectValue("email", "125", "Email должен быть в формате *@*.*");
+
+            }
             return "Authorization/Registration";
         }
         if( accountRepository.findAccountByUsername(account.getUsername())!=null)
