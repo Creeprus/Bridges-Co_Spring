@@ -25,6 +25,7 @@
 <figure class="figure">
     <button class="figure-img img-fluid rounded" type="submit"><h1>Экспортировать таблицу товаров</h1></button>
 </figure>
+
 </form>
 
     <form method="get" th:action="'/Admin/exportsuppliers'">
@@ -33,7 +34,16 @@
         </figure>
     </form>
 
-
+    <form method="get" th:action="'/Admin/backup'">
+        <figure class="figure">
+            <button class="figure-img img-fluid rounded" type="submit"><h1>Бэкап</h1></button>
+        </figure>
+    </form>
+    <form method="get" th:action="'/Admin/restore'">
+        <figure class="figure">
+            <button class="figure-img img-fluid rounded" type="submit"><h1>Восстановление базы данных</h1></button>
+        </figure>
+    </form>
        <figure class="figure">
             <button class="figure-img img-fluid rounded" data-toggle="modal" th:data-target="${'#accountdetail'+currentaccount.id}"><h1>Информация о вашем аккаунте</h1></button>
         </figure>

@@ -22,8 +22,11 @@ import org.supercsv.prefs.CsvPreference;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -240,10 +243,54 @@ public String userEditView(@PathVariable(name="id") Long id,
 
         csvBeanWriter.close();
     }
-    @GetMapping ("/backup")
-    public String backup(DBManaging.DatabaseUtilBackup dbManaging) throws IOException, InterruptedException {
-        DBManaging.DatabaseUtilBackup.backup();
-        return "redirect:/Admin/Index";
+    @GetMapping("/backup")
+    @ResponseBody
+    public String backup(String dbName) {
+        try {
+            String folderPath = System.getProperty("user.dir") + "\\backup\\";
+            File temp = new File(folderPath);
+            temp.mkdir();
+
+            String savePath = folderPath + "backup.sql";
+            dbName="BridgesAndCo";
+            String pathtodump="C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\";
+            String executeCmd = "cmd.exe /c mysqldump --port=3306 --column_statistics=0 -uroot " + dbName + " -r " + savePath;
+
+            Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
+            int processComplete = runtimeProcess.waitFor();
+
+            if (processComplete == 0) {
+
+                return ("Резервное копирование базы данных прошло успешно");
+            } else {
+
+                return ("Не удалось сохранить резервную копию базы данных, ");
+            }
+
+        } catch (IOException | InterruptedException ex) {
+
+            return ("Не удалось сохранить резервную копию базы данных: " + ex.getMessage());
+        }
+    }
+
+    @GetMapping("/restore")
+    @ResponseBody
+    public String restore(String dbName){
+        try {
+            dbName="BridgesAndCo";
+            String executeCmd = "cmd.exe /c mysql --port=3306 -uroot " + dbName + " < " + System.getProperty("user.dir") + "\\backup\\backup.sql";
+            Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
+            int processComplete = runtimeProcess.waitFor();
+
+            if (processComplete == 0) {
+                return ("БД успешно восстановлена из файла: " + System.getProperty("user.dir") + "\\backup\\backup.sql");
+            } else {
+                return ("Ошибка при восстановлении БД из файла: " + System.getProperty("user.dir") + "\\backup\\backup.sql");
+            }
+        } catch(IOException | InterruptedException | HeadlessException e){
+
+            return ("Ошибка при восстановлении БД из файла: " + System.getProperty("user.dir") + "\\backup\\backup.sql" + " | " + e.getMessage());
+        }
     }
     @PostMapping("/AccountUpdate{id}")
     public String updateAccount(@PathVariable(name="id")Long id,User useredit,Model model)
