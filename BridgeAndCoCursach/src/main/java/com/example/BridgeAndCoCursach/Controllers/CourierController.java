@@ -19,7 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-@PreAuthorize("hasAnyAuthority('Курьер')")
+@PreAuthorize("hasAnyAuthority('Курьер','Администратор')")
 @Controller
 @RequestMapping("/Courier")
 public class CourierController {

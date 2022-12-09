@@ -64,6 +64,7 @@ public String regView(Account user, Model model)
 {
     user=accountRepository.findAccountByUsername(UserSession());
     model.addAttribute("currentaccount",user);
+    model.addAttribute("state","");
     return "/Admin/Index";
 }
     @GetMapping("/Account/Filter/{search_name}")
@@ -244,52 +245,68 @@ public String userEditView(@PathVariable(name="id") Long id,
         csvBeanWriter.close();
     }
     @GetMapping("/backup")
-    @ResponseBody
-    public String backup(String dbName) {
+    public String backup(String dbName, Model model) {
         try {
             String folderPath = System.getProperty("user.dir") + "\\backup\\";
             File temp = new File(folderPath);
             temp.mkdir();
-
+         Account user=accountRepository.findAccountByUsername(UserSession());
+            model.addAttribute("currentaccount",user);
             String savePath = folderPath + "backup.sql";
             dbName="BridgesAndCo";
             String pathtodump="C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\";
             String executeCmd = "cmd.exe /c mysqldump --port=3306 --column_statistics=0 -uroot " + dbName + " -r " + savePath;
-
+            String state;
             Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
             int processComplete = runtimeProcess.waitFor();
 
             if (processComplete == 0) {
 
-                return ("Резервное копирование базы данных прошло успешно");
+                state="Резервное копирование базы данных прошло успешно";
+                model.addAttribute("state",state);
+                return "/Admin/Index";
             } else {
 
-                return ("Не удалось сохранить резервную копию базы данных, ");
+                state="Не удалось сохранить резервную копию базы данных";
+                model.addAttribute("state",state);
+                return "/Admin/Index";
+
             }
 
         } catch (IOException | InterruptedException ex) {
 
-            return ("Не удалось сохранить резервную копию базы данных: " + ex.getMessage());
+            String state;
+            state="Не удалось сохранить резервную копию базы данных"+ ex.getMessage();
+            model.addAttribute("state",state);
+            return "/Admin/Index";
         }
     }
 
     @GetMapping("/restore")
-    @ResponseBody
-    public String restore(String dbName){
+
+    public String restore(String dbName, Model model){
         try {
             dbName="BridgesAndCo";
             String executeCmd = "cmd.exe /c mysql --port=3306 -uroot " + dbName + " < " + System.getProperty("user.dir") + "\\backup\\backup.sql";
+            Account user=accountRepository.findAccountByUsername(UserSession());
+            model.addAttribute("currentaccount",user);
             Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
             int processComplete = runtimeProcess.waitFor();
 
             if (processComplete == 0) {
-                return ("БД успешно восстановлена из файла: " + System.getProperty("user.dir") + "\\backup\\backup.sql");
+                String state="БД успешно восстановлена из файла: " + System.getProperty("user.dir") + "\\backup\\backup.sql";
+                model.addAttribute("state",state);
+                return "/Admin/Index";
             } else {
-                return ("Ошибка при восстановлении БД из файла: " + System.getProperty("user.dir") + "\\backup\\backup.sql");
+                String state="Ошибка при восстановлении БД из файла: " + System.getProperty("user.dir") + "\\backup\\backup.sql";
+                model.addAttribute("state",state);
+                return "/Admin/Index";
             }
         } catch(IOException | InterruptedException | HeadlessException e){
 
-            return ("Ошибка при восстановлении БД из файла: " + System.getProperty("user.dir") + "\\backup\\backup.sql" + " | " + e.getMessage());
+            String state="Ошибка при восстановлении БД из файла: " + System.getProperty("user.dir") + "\\backup\\backup.sql" + " | " + e.getMessage();
+            model.addAttribute("state",state);
+            return "/Admin/Index";
         }
     }
     @PostMapping("/AccountUpdate{id}")
