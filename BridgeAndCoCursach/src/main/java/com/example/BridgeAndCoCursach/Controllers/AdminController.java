@@ -41,14 +41,11 @@ public class AdminController {
     public String UserSession() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
-
-
-       // modelMap.addAttribute("username", name);
         return name;
     }
     @Autowired
     UserService service;
-@Autowired
+    @Autowired
     AccountRepository accountRepository;
     @Autowired
     UserRepository userRepository;
@@ -72,7 +69,6 @@ public String regView(Account user, Model model)
     {
         String a=UserSession();
         model.addAttribute("listRole", Role.values());
-
         model.addAttribute("listUser",accountRepository.findAccountByRole(name));
         return "/Admin/Account/View";
     }
@@ -81,8 +77,6 @@ public String regView(Account user, Model model)
     {
         String a=UserSession();
         model.addAttribute("listRole", Role.values());
-
-
         if(name.equals(""))
         {
             model.addAttribute("listUser",accountRepository.findAll());
@@ -100,7 +94,6 @@ public String regView(Account user, Model model)
     {
         String a=UserSession();
         model.addAttribute("listRole", Role.values());
-
         model.addAttribute("listUser",accountRepository.findAll(Sort.by("username").ascending()));
         return "/Admin/Account/View";
     }
@@ -109,7 +102,6 @@ public String regView(Account user, Model model)
     {
         String a=UserSession();
         model.addAttribute("listRole", Role.values());
-
         model.addAttribute("listUser",accountRepository.findAll(Sort.by("username").descending()));
         return "/Admin/Account/View";
     }
@@ -118,7 +110,6 @@ public String regView(Account user, Model model)
     {
         String a=UserSession();
         model.addAttribute("listRole", Role.values());
-
         model.addAttribute("listUser",accountRepository.findAll());
         return "/Admin/Account/View";
     }
@@ -145,35 +136,19 @@ public String userEditView(@PathVariable(name="id") Long id,
    String filename="users.csv";
    String headerKey="Content-Disposition";
    String headerValue="attachment; filename="+filename;
-
    response.setHeader(headerKey,headerValue);
-
    List<User> listUsers=service.listAll();
-
-
-
-    // closing writer connection
-
    Locale locale=new Locale("ru","RU");
-    response.setLocale(locale);
-    response.setCharacterEncoding("UTF-8");
-    ICsvBeanWriter csvBeanWriter=new CsvBeanWriter(response.getWriter(), CsvPreference.EXCEL_PREFERENCE);
-
+   response.setLocale(locale);
+   response.setCharacterEncoding("UTF-8");
+   ICsvBeanWriter csvBeanWriter=new CsvBeanWriter(response.getWriter(), CsvPreference.EXCEL_PREFERENCE);
     String[] csvHeader={"id Пользователя","Имя","Фамилия","Отчество","Почта","Номер телефона"};
-   // String[] csvHeader_acc={"Логин"};
     String[] nameMappingus={"id","name","surname","patronymic","Email","PhoneNumber"};
-
-   // String[] nameMappingac={"username"};
     csvBeanWriter.writeHeader(csvHeader);
-   // csvBeanWriter.writeHeader(csvHeader_acc);
     for (User user:listUsers)
     {
         csvBeanWriter.write(user,nameMappingus);
-
-       // csvBeanWriter.write(user.getAccount(),nameMappingac);
     }
-
-
     csvBeanWriter.close();
 }
     @GetMapping ("/exportshipments")
@@ -183,35 +158,19 @@ public String userEditView(@PathVariable(name="id") Long id,
         String filename="shipment.csv";
         String headerKey="Content-Disposition";
         String headerValue="attachment; filename="+filename;
-
         response.setHeader(headerKey,headerValue);
-
-      List<Shipment> shipments=shipmentRepository.findAll();
-
-
-
-        // closing writer connection
-
+        List<Shipment> shipments=shipmentRepository.findAll();
         Locale locale=new Locale("ru","RU");
         response.setLocale(locale);
         response.setCharacterEncoding("UTF-8");
         ICsvBeanWriter csvBeanWriter=new CsvBeanWriter(response.getWriter(), CsvPreference.EXCEL_PREFERENCE);
-
         String[] csvHeader={"id Товара","Наименование товара","Срок годности","Стоимость"};
-        // String[] csvHeader_acc={"Логин"};
         String[] nameMappingus={"id","shipmentname","expirationdate","Cost"};
-
-        // String[] nameMappingac={"username"};
         csvBeanWriter.writeHeader(csvHeader);
-        // csvBeanWriter.writeHeader(csvHeader_acc);
         for (Shipment shipment:shipments)
         {
             csvBeanWriter.write(shipment,nameMappingus);
-
-            // csvBeanWriter.write(user.getAccount(),nameMappingac);
         }
-
-
         csvBeanWriter.close();
     }
     @GetMapping ("/exportsuppliers")
@@ -222,26 +181,19 @@ public String userEditView(@PathVariable(name="id") Long id,
         String filename="suppliers.csv";
         String headerKey="Content-Disposition";
         String headerValue="attachment; filename="+filename;
-
         response.setHeader(headerKey,headerValue);
         List<Supplier> suppliers= (List<Supplier>) supplierRepository.findAll();
         Locale locale=new Locale("ru","RU");
         response.setLocale(locale);
         response.setCharacterEncoding("UTF-8");
         ICsvBeanWriter csvBeanWriter=new CsvBeanWriter(response.getWriter(), CsvPreference.EXCEL_PREFERENCE);
-
         String[] csvHeader={"id Поставщика","Наименование поставщика","Страна"};
         String[] nameMappingus={"id","suppliername","Country"};
-
         csvBeanWriter.writeHeader(csvHeader);
-
         for (Supplier supplier:suppliers)
         {
             csvBeanWriter.write(supplier,nameMappingus);
-
         }
-
-
         csvBeanWriter.close();
     }
     @GetMapping("/backup")
@@ -250,7 +202,7 @@ public String userEditView(@PathVariable(name="id") Long id,
             String folderPath = System.getProperty("user.dir") + "\\backup\\";
             File temp = new File(folderPath);
             temp.mkdir();
-         Account user=accountRepository.findAccountByUsername(UserSession());
+            Account user=accountRepository.findAccountByUsername(UserSession());
             model.addAttribute("currentaccount",user);
             String savePath = folderPath + "backup.sql";
             dbName="BridgesAndCo";
@@ -259,14 +211,11 @@ public String userEditView(@PathVariable(name="id") Long id,
             String state;
             Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
             int processComplete = runtimeProcess.waitFor();
-
             if (processComplete == 0) {
-
                 state="Резервное копирование базы данных прошло успешно";
                 model.addAttribute("state",state);
                 return "/Admin/Index";
             } else {
-
                 state="Не удалось сохранить резервную копию базы данных";
                 model.addAttribute("state",state);
                 return "/Admin/Index";
@@ -274,7 +223,6 @@ public String userEditView(@PathVariable(name="id") Long id,
             }
 
         } catch (IOException | InterruptedException ex) {
-
             String state;
             state="Не удалось сохранить резервную копию базы данных"+ ex.getMessage();
             model.addAttribute("state",state);
@@ -292,7 +240,6 @@ public String userEditView(@PathVariable(name="id") Long id,
             model.addAttribute("currentaccount",user);
             Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
             int processComplete = runtimeProcess.waitFor();
-
             if (processComplete == 0) {
                 String state="БД успешно восстановлена из файла: " + System.getProperty("user.dir") + "\\backup\\backup.sql";
                 model.addAttribute("state",state);
@@ -303,7 +250,6 @@ public String userEditView(@PathVariable(name="id") Long id,
                 return "/Admin/Index";
             }
         } catch(IOException | InterruptedException | HeadlessException e){
-
             String state="Ошибка при восстановлении БД из файла: " + System.getProperty("user.dir") + "\\backup\\backup.sql" + " | " + e.getMessage();
             model.addAttribute("state",state);
             return "/Admin/Index";
@@ -313,21 +259,14 @@ public String userEditView(@PathVariable(name="id") Long id,
     public String updateAccount(@PathVariable(name="id")Long id,User useredit,Model model)
     {
         User user=userRepository.findFirstByAccount(accountRepository.findById(id).orElseThrow());
-
        if(useredit.getAccount().getPassword()!="")
        {
            user.getAccount().setPassword(passwordEncoder.encode(useredit.getAccount().getPassword()));
        }
-
-
        user.setPhoneNumber(useredit.getPhoneNumber());
        user.setEmail(useredit.getEmail());
-
-
         userRepository.save(user);
-
-
-     Account  account=accountRepository.findAccountByUsername(UserSession());
+        Account  account=accountRepository.findAccountByUsername(UserSession());
         model.addAttribute("currentaccount",account);
         return "redirect:/Admin/Index";
     }

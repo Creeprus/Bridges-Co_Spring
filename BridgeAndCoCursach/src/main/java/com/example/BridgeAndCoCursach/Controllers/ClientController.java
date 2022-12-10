@@ -42,9 +42,6 @@ public class ClientController {
     public String UserSession() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
-
-
-        // modelMap.addAttribute("username", name);
         return name;
     }
     @GetMapping("/Index")
@@ -64,9 +61,6 @@ public class ClientController {
     @GetMapping("/SearchShip")
     public String userViewSearch(@RequestParam(name="search_name") String name,Account user, OrderShipment orderShipment, Pathing pathing,Model model)
     {
-
-
-
         if(name.equals(""))
         {
             model.addAttribute("storage",storageRepository.findAll());
@@ -83,8 +77,8 @@ public class ClientController {
     {
         String currentuser=UserSession();
         account=accountRepository.findAccountByUsername(currentuser);
-       User user=userRepository.findFirstByAccount(account);;
-List <OrderShipment> orders= (List<OrderShipment>) orderRepository.findAll();
+        User user=userRepository.findFirstByAccount(account);
+        List <OrderShipment> orders= (List<OrderShipment>) orderRepository.findAll();
         orders.removeIf(order -> !order.getUsers().contains(user));
         model.addAttribute("order",orders);
         return "/Client/Orders/View";
@@ -106,20 +100,19 @@ List <OrderShipment> orders= (List<OrderShipment>) orderRepository.findAll();
         Calendar cal = Calendar.getInstance();
         Date date=cal.getTime();
         storage=storageRepository.findById(currentid).orElseThrow();
-            orderShipment.setStorages(storage);
-pathing.setPath_time("Требует назначения");
+        orderShipment.setStorages(storage);
+        pathing.setPath_time("Требует назначения");
         pathing.setTransport("Требует назначения");
         pathing.setPathcost(0.00);
-            String currentuser=UserSession();
-             account=accountRepository.findAccountByUsername(currentuser);
-            orderShipment.setUsers( userRepository.findUserByAccount(account));
-             orderShipment.setStatus("В обработке");
-             orderShipment.setDate_of_order(date);
-             orderShipment.setPathing(pathing);
-             orderShipment.setSummary(storage.getAmount()*storage.getShipments().getCost());
-        //    orderShipment.setUsers(user);
+        String currentuser=UserSession();
+        account=accountRepository.findAccountByUsername(currentuser);
+        orderShipment.setUsers( userRepository.findUserByAccount(account));
+        orderShipment.setStatus("В обработке");
+        orderShipment.setDate_of_order(date);
+        orderShipment.setPathing(pathing);
+        orderShipment.setSummary(storage.getAmount()*storage.getShipments().getCost());
         pathingRepository.save(pathing);
-            orderRepository.save(orderShipment);
+        orderRepository.save(orderShipment);
         model.addAttribute("storage",storageRepository.findAll());
         return "redirect:/Client/Shipments/View";
     }
@@ -129,8 +122,6 @@ pathing.setPath_time("Требует назначения");
         orderShipment=orderRepository.findById(id).orElseThrow();
         orderShipment.setStatus("Отменён");
         orderRepository.save(orderShipment);
-
-
         String currentuser=UserSession();
         account=accountRepository.findAccountByUsername(currentuser);
         User user=userRepository.findFirstByAccount(account);;
@@ -143,21 +134,13 @@ pathing.setPath_time("Требует назначения");
     public String updateAccount(@PathVariable(name="id")Long id,User useredit,Model model)
     {
         User user=userRepository.findFirstByAccount(accountRepository.findById(id).orElseThrow());
-
         if(useredit.getAccount().getPassword()!="")
         {
             user.getAccount().setPassword(passwordEncoder.encode(useredit.getAccount().getPassword()));
         }
-
-
         user.setPhoneNumber(useredit.getPhoneNumber());
         user.setEmail(useredit.getEmail());
-
-
         userRepository.save(user);
-//        accountRepository.save(account);
-
-
         Account  account=accountRepository.findAccountByUsername(UserSession());
         model.addAttribute("currentaccount",account);
         return "redirect:/Client/Index";

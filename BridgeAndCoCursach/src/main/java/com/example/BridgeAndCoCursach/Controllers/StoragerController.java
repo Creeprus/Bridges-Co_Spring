@@ -3,27 +3,20 @@ package com.example.BridgeAndCoCursach.Controllers;
 
 import com.example.BridgeAndCoCursach.Models.*;
 import com.example.BridgeAndCoCursach.Repository.*;
-import com.example.BridgeAndCoCursach.Service.ShipmentService;
 import com.example.BridgeAndCoCursach.Service.StorageService;
-import io.micrometer.core.annotation.Timed;
-import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,9 +49,6 @@ UserRepository userRepository;
     public String UserSession() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
-
-
-        // modelMap.addAttribute("username", name);
         return name;
     }
     @GetMapping("/Index")
@@ -71,7 +61,6 @@ UserRepository userRepository;
     @GetMapping("/Storage/View")
     public String StoragerView(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -81,7 +70,6 @@ UserRepository userRepository;
     @GetMapping("/Shipment/SortAsc")
     public String StoragerSortAscShipment(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -91,7 +79,6 @@ UserRepository userRepository;
     @GetMapping("/Shipment/SortDesc")
     public String StoragerSortDescShipment(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -101,7 +88,6 @@ UserRepository userRepository;
     @GetMapping("/Date/SortDesc")
     public String StoragerSortDescDate(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -111,7 +97,6 @@ UserRepository userRepository;
     @GetMapping("/Date/SortAsc")
     public String StoragerSortAscDate(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -121,7 +106,6 @@ UserRepository userRepository;
     @GetMapping("/Amount/SortAsc")
     public String StoragerSortAscAmount(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -131,7 +115,6 @@ UserRepository userRepository;
     @GetMapping("/Amount/SortDesc")
     public String StoragerSortDescAmount(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -147,15 +130,11 @@ UserRepository userRepository;
 
                                Model model)
     {
-Storage storage1=storageRepository.findById(id).orElseThrow();
-
-storage1.getSupplies().setSupplier(supplierRepository.findById(listSuppliers).orElseThrow());
+        Storage storage1=storageRepository.findById(id).orElseThrow();
+        storage1.getSupplies().setSupplier(supplierRepository.findById(listSuppliers).orElseThrow());
         storage.setShipments(storage1.getShipments());
         storage.setSupplies(storage1.getSupplies());
         storageRepository.save(storage);
-
-
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storage);
         model.addAttribute("shipment",shipment);
@@ -167,8 +146,6 @@ storage1.getSupplies().setSupplier(supplierRepository.findById(listSuppliers).or
     {
         List<Storage> storageslist = new ArrayList<>();
         if(name!="") {
-
-
             List<Shipment> shipmentList = shipmentRepository.findShipmentByShipmentnameContaining(name);
             for (Shipment shipment1 : shipmentList
             ) {
@@ -181,7 +158,6 @@ storage1.getSupplies().setSupplier(supplierRepository.findById(listSuppliers).or
 
             model.addAttribute("storage", storageRepository.findAll());
         }
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -191,41 +167,31 @@ storage1.getSupplies().setSupplier(supplierRepository.findById(listSuppliers).or
     @GetMapping("/Suppliers/View")
     public String SuppliersView(Supplier supplier, Model model)
     {
-
         model.addAttribute("suppliers",supplierRepository.findAll());
-
         return "/Storager/Suppliers/View";
     }
     @GetMapping("/Supplier/SortAsc")
     public String SuppliersSortAscSupplier(Supplier supplier, Model model)
     {
-
         model.addAttribute("suppliers",supplierRepository.findAll(Sort.by("suppliername").ascending()));
-
         return "/Storager/Suppliers/View";
     }
     @GetMapping("/Supplier/SortDesc")
     public String SuppliersSortDescSupplier(Supplier supplier, Model model)
     {
-
         model.addAttribute("suppliers",supplierRepository.findAll(Sort.by("suppliername").descending()));
-
         return "/Storager/Suppliers/View";
     }
     @GetMapping("/Country/SortAsc")
     public String SuppliersSortAscCountry(Supplier supplier, Model model)
     {
-
         model.addAttribute("suppliers",supplierRepository.findAll(Sort.by("country").ascending()));
-
         return "/Storager/Suppliers/View";
     }
     @GetMapping("/Country/SortDesc")
     public String SuppliersSortDescCountry(Supplier supplier, Model model)
     {
-
         model.addAttribute("suppliers",supplierRepository.findAll(Sort.by("country").descending()));
-
         return "/Storager/Suppliers/View";
     }
     @PostMapping("/Suppliers/Add")
@@ -240,7 +206,6 @@ storage1.getSupplies().setSupplier(supplierRepository.findById(listSuppliers).or
     public String SuppliersEdit( @PathVariable Long id,Supplier supplier,
                                 Model model)
     {
-
         supplierRepository.save(supplier);
         model.addAttribute("suppliers",supplierRepository.findAll());
         return "redirect:/Storager/Suppliers/View";
@@ -250,14 +215,13 @@ storage1.getSupplies().setSupplier(supplierRepository.findById(listSuppliers).or
                                  Model model)
     {
         supplier=supplierRepository.findById(id).orElseThrow();
-
         if(supplier.getSupplies().size()!=0)
         {
             model.addAttribute("errors","Нельзя удалить поставщика, учавствующего в поставках");
             model.addAttribute("suppliers",supplierRepository.findAll());
             return "/Storager/Suppliers/View";
         }
-         supplierRepository.delete(supplier);
+        supplierRepository.delete(supplier);
         model.addAttribute("suppliers",supplierRepository.findAll());
         return "redirect:/Storager/Suppliers/View";
     }
@@ -273,18 +237,6 @@ storage1.getSupplies().setSupplier(supplierRepository.findById(listSuppliers).or
         model.addAttribute("suppliers",supplierRepository.findSupplierBySuppliernameContaining(name));
         return "/Storager/Suppliers/View";
     }
-//    @Timed(value = "Storage.time", description = "Time taken to return Storage")
-//    public Storage getStorage() {
-//        return new Storage();
-//    }
-//    @Timed(value = "Supplier.time", description = "Time taken to return Supplier")
-//    public Supplier getSupplier() {
-//        return new Supplier();
-//    }
-//    @Timed(value = "Shipment.time", description = "Time taken to return Shipment")
-//    public Shipment getShipment() {
-//        return new Shipment();
-//    }
 @GetMapping("/metrics")
 public String metric(Model model)
 {
@@ -304,21 +256,13 @@ public String metric(Model model)
     public String updateAccount(@PathVariable(name="id")Long id, User useredit, Model model)
     {
         User user=userRepository.findFirstByAccount(accountRepository.findById(id).orElseThrow());
-
         if(useredit.getAccount().getPassword()!="")
         {
             user.getAccount().setPassword(passwordEncoder.encode(useredit.getAccount().getPassword()));
         }
-
-
         user.setPhoneNumber(useredit.getPhoneNumber());
         user.setEmail(useredit.getEmail());
-
-
         userRepository.save(user);
-//        accountRepository.save(account);
-
-
         Account  account=accountRepository.findAccountByUsername(UserSession());
         model.addAttribute("currentaccount",account);
         return "redirect:/Storager/Index";

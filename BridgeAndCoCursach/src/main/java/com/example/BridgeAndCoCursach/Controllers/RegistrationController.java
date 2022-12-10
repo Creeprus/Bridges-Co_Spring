@@ -6,21 +6,17 @@ import com.example.BridgeAndCoCursach.Models.User;
 import com.example.BridgeAndCoCursach.Repository.AccountRepository;
 import com.example.BridgeAndCoCursach.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Collections;
@@ -44,9 +40,6 @@ public class RegistrationController  {
     public String UserSession() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
-
-
-        // modelMap.addAttribute("username", name);
         return name;
     }
     @GetMapping("/Registration")
@@ -66,7 +59,6 @@ public class RegistrationController  {
             @Valid User user,
             BindingResult bindingResultUs,
             Model model
-
     )
 
     {
@@ -89,7 +81,6 @@ public class RegistrationController  {
             }
             if(user.getEmail()!="" && bindingResultUs.hasErrors()) {
                 bindingResultUs.rejectValue("email", "125", "Email должен быть в формате *@*.*");
-
             }
             return "Authorization/Registration";
         }
@@ -98,7 +89,6 @@ public class RegistrationController  {
             model.addAttribute("error","Такой пользователь уже существует");
             return "Authorization/Registration";
         }
-
             account.setActive(true);
         if(accountRepository.findAll()==null)
         {
@@ -108,13 +98,8 @@ public class RegistrationController  {
             account.setRole(Collections.singleton(Role.Клиент));
         }
             account.setPassword(passwordEncoder.encode(account.getPassword()));
-
             user.setAccount(account);
-
             userRepository.save(user);
-
-
-
         return "redirect:/Login";
     }
 

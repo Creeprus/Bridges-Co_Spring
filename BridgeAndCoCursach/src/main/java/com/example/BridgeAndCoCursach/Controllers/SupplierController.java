@@ -3,9 +3,6 @@ package com.example.BridgeAndCoCursach.Controllers;
 import com.example.BridgeAndCoCursach.Models.*;
 import com.example.BridgeAndCoCursach.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -13,14 +10,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,16 +45,13 @@ public class SupplierController {
     public String UserSession() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
-
-
-        // modelMap.addAttribute("username", name);
         return name;
     }
 
     @GetMapping("/Index")
     public String SupplierIndex(Model model)
     {
-     Account   user=accountRepository.findAccountByUsername(UserSession());
+        Account   user=accountRepository.findAccountByUsername(UserSession());
         model.addAttribute("currentaccount",user);
         return "/Supplier/Index";
     }
@@ -69,22 +59,15 @@ public class SupplierController {
     @GetMapping("/View")
     public String SupplierView(@RequestParam(defaultValue = "0") int currentpage,Storage storages, Shipment shipment, Supply supplies,Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
-//        Page<Storage> page=storageRepository.findAll(PageRequest.of(0, 5));
-//        int totalpages=page.getTotalPages();
-//        long totalitems=page.getTotalElements();
-//        model.addAttribute("totalpages",totalpages);
-//        model.addAttribute("totalitems",totalitems);
         model.addAttribute("storage",storageRepository.findAll());
         return "/Supplier/View";
     }
     @GetMapping("/Amount/SortDesc")
     public String SupplierSortDescAmount(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -94,7 +77,6 @@ public class SupplierController {
     @GetMapping("/Amount/SortAsc")
     public String SupplierSortAscAmount(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -104,7 +86,6 @@ public class SupplierController {
     @GetMapping("/Date/SortDesc")
     public String SupplierSortDescDate(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -114,7 +95,6 @@ public class SupplierController {
     @GetMapping("/Date/SortAsc")
     public String SupplierSortAscDate(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -124,7 +104,6 @@ public class SupplierController {
     @GetMapping("/Shipment/SortAsc")
     public String SupplierSortAscShipment(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -134,7 +113,6 @@ public class SupplierController {
     @GetMapping("/Shipment/SortDesc")
     public String SupplierSortDescShipment(@RequestParam(defaultValue = "0") int currentpage, Storage storages, Shipment shipment, Supply supplies, Model model)
     {
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
@@ -151,18 +129,13 @@ public class SupplierController {
     {
         Calendar cal = Calendar.getInstance();
         Date date=cal.getTime();
-
         supply.setSupplier(supplierRepository.findById(listSuppliers).orElseThrow());
         supply.setDateofsupply(date);
         storage.setSupplies(supply);
         storage.setShipments(shipment);
-
         shipmentRepository.save(shipment);
         supplyRepository.save(supply);
         storageRepository.save(storage);
-
-
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storage);
         model.addAttribute("shipment",shipment);
@@ -174,8 +147,6 @@ public class SupplierController {
     {
         List<Storage> storageslist = new ArrayList<>();
         if(name!="") {
-
-
             List<Shipment> shipmentList = shipmentRepository.findShipmentByShipmentnameContaining(name);
             for (Shipment shipment1 : shipmentList
             ) {
@@ -188,11 +159,9 @@ public class SupplierController {
 
                 model.addAttribute("storage", storageRepository.findAll());
             }
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
-
         return "/Supplier/View";
     }
 
@@ -200,73 +169,52 @@ public class SupplierController {
     public String SupplierSortAsc( Storage storages, Shipment shipment, Supply supplies,Model model)
     {
         List<Storage> storageslist = new ArrayList<>();
-
-
-
-            List<Shipment> shipmentList = shipmentRepository.findAll(Sort.by("shipmentname").ascending());
+        List<Shipment> shipmentList = shipmentRepository.findAll(Sort.by("shipmentname").ascending());
         for (Shipment shipment1 : shipmentList
         ) {
             storageslist.add(storageRepository.findStorageByShipments(shipment1));
         }
-
         if (storageslist.size() != 0) {
             model.addAttribute("storage", storageslist);
         } else {
 
             model.addAttribute("storage", storageRepository.findAll());
         }
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
-
         return "/Supplier/View";
     }
     @GetMapping("/SortDesc")
     public String SupplierSortDesc( Storage storages, Shipment shipment, Supply supplies,Model model)
     {
         List<Storage> storageslist = new ArrayList<>();
-
-
-
         List<Shipment> shipmentList = shipmentRepository.findAll(Sort.by("shipmentname").descending());
         for (Shipment shipment1 : shipmentList
         ) {
             storageslist.add(storageRepository.findStorageByShipments(shipment1));
         }
-
         if (storageslist.size() != 0) {
             model.addAttribute("storage", storageslist);
         } else {
-
             model.addAttribute("storage", storageRepository.findAll());
         }
-
         model.addAttribute("listSuppliers",supplierRepository.findAll());
         model.addAttribute("storages",storages);
         model.addAttribute("shipment",shipment);
-
         return "/Supplier/View";
     }
     @PostMapping("/AccountUpdate{id}")
     public String updateAccount(@PathVariable(name="id")Long id, User useredit, Model model)
     {
         User user=userRepository.findFirstByAccount(accountRepository.findById(id).orElseThrow());
-
         if(useredit.getAccount().getPassword()!="")
         {
             user.getAccount().setPassword(passwordEncoder.encode(useredit.getAccount().getPassword()));
         }
-
-
         user.setPhoneNumber(useredit.getPhoneNumber());
         user.setEmail(useredit.getEmail());
-
-
         userRepository.save(user);
-//        accountRepository.save(account);
-
-
         Account account=accountRepository.findAccountByUsername(UserSession());
         model.addAttribute("currentaccount",account);
         return "redirect:/Supplier/Index";
